@@ -17,3 +17,10 @@ class Database(object):
             print("Couldn't connect to database")
         except:
             print("Something went wrong")
+
+    # main page methods
+
+    # returns list of all students currently logged in
+    @staticmethod
+    def list_all_logins():
+        return Database.DATABASE["current_logins"].find()
