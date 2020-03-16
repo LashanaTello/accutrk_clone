@@ -24,3 +24,16 @@ class Database(object):
     @staticmethod
     def list_all_logins():
         return Database.DATABASE["current_logins"].find()
+
+    # students page methods
+
+    # adds a student to database
+    @staticmethod
+    def add_student(student):
+        Database.DATABASE["students"].insert(student)
+
+    # returns list of all students
+    @staticmethod
+    def get_all_students():
+        return Database.DATABASE["students"].find({}, {"_id": 0})
+
