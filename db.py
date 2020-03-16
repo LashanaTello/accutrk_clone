@@ -37,3 +37,11 @@ class Database(object):
     def get_all_students():
         return Database.DATABASE["students"].find({}, {"_id": 0})
 
+    # changes last name of student whose eid is an_eid
+    # not finished making this yet
+    @staticmethod
+    def update_student_last_name(an_eid, new_last_name):
+        Database.DATABASE["students"].update_one({"eid": an_eid}, { "$set": {"last_name": new_last_name} })
+
+
+
