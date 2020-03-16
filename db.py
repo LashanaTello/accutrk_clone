@@ -31,8 +31,8 @@ class Database(object):
     @staticmethod
     def add_student(student):
         found_doc = Database.DATABASE["students"].find({"eid": student["eid"]})
-        if (found_doc == None):
-            Database.DATABASE["students"].insert(student)
+        if found_doc is None:
+            Database.DATABASE["students"].insert_one(student)
             return True
         return False
 
