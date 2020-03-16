@@ -30,7 +30,11 @@ class Database(object):
     # adds a student to database
     @staticmethod
     def add_student(student):
-        Database.DATABASE["students"].insert(student)
+        found_doc = Database.DATABASE["students"].find({"eid": student["eid"]})
+        if (found_doc == None):
+            Database.DATABASE["students"].insert(student)
+            return True
+        return False
 
     # returns list of all students
     @staticmethod
@@ -43,5 +47,7 @@ class Database(object):
     def update_student_last_name(an_eid, new_last_name):
         Database.DATABASE["students"].update_one({"eid": an_eid}, { "$set": {"last_name": new_last_name} })
 
-
-
+    # removes student whose eid is an_eid from system
+    @staticmethod
+    def remove_student(an_eid):
+        Database.DATABASE["students"].delete_one({"eid": an_eid})
