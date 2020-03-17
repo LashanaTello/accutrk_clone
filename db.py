@@ -181,12 +181,50 @@ class Database(object):
     # adds professor to system
     # returns true if professor was added, returns false otherwise
     @staticmethod
-    def add_professor(first_name, last_name, email):
+    def add_professor(first_name, last_name, email=""):
         found_doc = Database.DATABASE["professors"].find_one({"first_name": first_name,
                                                               "last_name": last_name, "email": email})
         if found_doc is None:
             Database.DATABASE["professors"].insert_one(
                 {"first_name": first_name, "last_name": last_name, "email": email})
+            return True
+        return False
+
+    # returns list of all professors in the system
+    @staticmethod
+    def get_all_professors():
+        return Database.DATABASE["professors"].find({}, {"_id": 0})
+
+    # returns true if professor's first_name was changed to new_first_name, returns false otherwise
+    @staticmethod
+    def update_professor_first_name(new_first_name, first_name, last_name, email=""):
+        result = Database.DATABASE["professors"].update_one({"first_name": first_name, "last_name": last_name,
+                                                             "email": email},
+                                                            {"$set": {"first_name": new_first_name}})
+
+        if result.modified_count > 0:
+            return True
+        return False
+
+    # returns true if professor's last_name was changed to new_last_name, returns false otherwise
+    @staticmethod
+    def update_professor_last_name(new_last_name, first_name, last_name, email=""):
+        result = Database.DATABASE["professors"].update_one({"first_name": first_name, "last_name": last_name,
+                                                             "email": email},
+                                                            {"$set": {"last_name": new_last_name}})
+
+        if result.modified_count > 0:
+            return True
+        return False
+
+    # returns true if professor's email was changed to new_email, returns false otherwise
+    @staticmethod
+    def update_professor_email(new_email, first_name, last_name, email=""):
+        result = Database.DATABASE["professors"].update_one({"first_name": first_name, "last_name": last_name,
+                                                             "email": email},
+                                                            {"$set": {"email": new_email}})
+
+        if result.modified_count > 0:
             return True
         return False
 
