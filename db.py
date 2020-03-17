@@ -228,4 +228,14 @@ class Database(object):
             return True
         return False
 
+    # returns true if professor was removed from system, returns false otherwise
+    @staticmethod
+    def remove_professor(first_name, last_name, email=""):
+        result = Database.DATABASE["professors"].delete_one({"first_name": first_name, "last_name": last_name,
+                                                             "email": email})
+
+        if result.deleted_count > 0:
+            return True
+        return False
+
     # register page
