@@ -28,12 +28,14 @@ class Database(object):
     # students page methods
 
     # adds a student to database
-    # ##########################change this
+    # returns true if student was added to system, returns false otherwise
     @staticmethod
-    def add_student(student):
-        found_doc = Database.DATABASE["students"].find({"eid": student["eid"]})
+    def add_student(first_name, last_name, eid, barcode="", email=""):
+        found_doc = Database.DATABASE["students"].find_one({"eid": eid})
         if found_doc is None:
-            Database.DATABASE["students"].insert_one(student)
+            enrolled_list = []
+            Database.DATABASE["students"].insert_one({"first_name": first_name, "last_name": last_name, "eid": eid,
+                                                      "barcode": barcode, "email": email, "enrolled_list": enrolled_list})
             return True
         return False
 
