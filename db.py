@@ -247,11 +247,11 @@ class Database(object):
         return Database.DATABASE['classes'].find({}, {"_id": 0, "professor": 0})
 
     # registers student for a class by adding student to a class's class_roster field
-    # returns updated document if student with eid "student_eid" was registered to class whose
-    # subject, catalog and section are "subject", "catalog" and "section" respectively,
-    # returns (false, false) if student was not registered and did not have their enrolled_list updated,
-    # returns (true, false) if student was registered for class but their enrolled_list was not updated,
-    # returns (false, true) if student was not registered but their enrolled_list was updated
+    # returns (result, true) in which result is the updated document if student with eid "student_eid" was registered
+    # to the class whose subject, catalog and section are "subject", "catalog" and "section" respectively,
+    # returns (None, false) if student was not registered and did not have their enrolled_list updated,
+    # returns (result, false) if student was registered for class but their enrolled_list was not updated,
+    # returns (None, true) if student was not registered but their enrolled_list was updated
     @staticmethod
     def register_student(student_eid, student_first_name, student_last_name, subject, catalog, section):
         # update classes and students
@@ -289,12 +289,12 @@ class Database(object):
                                                                                  "%m/%d/%Y %I:%M:%S %p")}}})
 
         if result is not None and stu_result.modified_count > 0:
-            return result
+            return result, True
         elif result is None and stu_result.modified_count == 0:
-            return False, False
-        elif result is None:
-            return False, True
+            return None, False
+        elif result is None and stu_result.modified_count > 0:
+            return None, True
         else:
-            return True, False
+            return result, False
 
 
