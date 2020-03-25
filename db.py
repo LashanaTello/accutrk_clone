@@ -1,5 +1,6 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, ReturnDocument, ASCENDING
 from pymongo.errors import ConnectionFailure
+import datetime
 from config import keys, defaultDB
 
 
@@ -239,3 +240,61 @@ class Database(object):
         return False
 
     # register page
+
+    # returns list all classes and the students in them
+    @staticmethod
+    def get_classes_with_students():
+        return Database.DATABASE['classes'].find({}, {"_id": 0, "professor": 0})
+
+    # registers student for a class by adding student to a class's class_roster field
+    # returns updated document if student with eid "student_eid" was registered to class whose
+    # subject, catalog and section are "subject", "catalog" and "section" respectively,
+    # returns (false, false) if student was not registered and did not have their enrolled_list updated,
+    # returns (true, false) if student was registered for class but their enrolled_list was not updated,
+    # returns (false, true) if student was not registered but their enrolled_list was updated
+    @staticmethod
+    def register_student(student_eid, student_first_name, student_last_name, subject, catalog, section):
+        # update classes and students
+
+        # if this is None, student was not registered. Meaning, they were not added to the class's class_roster
+        # if this is not None, student was registered and result is set to the updated class_roster
+        result = Database.DATABASE["classes"].find_one_and_update({"subject": subject, "catalog": catalog,
+                                                                   "section": section},
+                                                                  {"$addToSet":
+                                                                       {"class_roster":
+                                                                            {"student_eid": student_eid,
+                                                                             "student_first_name": student_first_name,
+                                                                             "student_last_name": student_last_name}}},
+                                                                  projection={"_id": 0, "class_roster": 1}, sort=None,
+                                                                  return_document=ReturnDocument.AFTER)
+
+        # adds class info and registration info to student's enrolled_list field if the student is registered for this
+        # class already
+        # stu_result tells you whether or not the student's enrolled_list was updated
+        stu_result = Database.DATABASE["students"].update_one({"eid": student_eid,
+                                                               "enrolled_list":
+                                                                   {"$not":
+                                                                        {"$elemMatch":
+                                                                             {"subject": subject,
+                                                                              "catalog": catalog,
+                                                                              "section": section}}}},
+                                                              {"$push":
+                                                                   {"enrolled_list":
+                                                                        {"subject": subject,
+                                                                         "catalog": catalog,
+                                                                         "section": section,
+                                                                         "registered_by": "meeeee",
+                                                                         "registered_date":
+                                                                             datetime.datetime.now().strftime(
+                                                                                 "%m/%d/%Y %I:%M:%S %p")}}})
+
+        if result is not None and stu_result.modified_count > 0:
+            return result
+        elif result is None and stu_result.modified_count == 0:
+            return False, False
+        elif result is None:
+            return False, True
+        else:
+            return True, False
+
+
