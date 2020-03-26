@@ -241,7 +241,7 @@ class Database(object):
 
     # register page
 
-    # returns list all classes and the students in them
+    # returns a list of all classes and the students in them
     @staticmethod
     def get_classes_with_students():
         return Database.DATABASE['classes'].find({}, {"_id": 0, "professor": 0})
