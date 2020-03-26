@@ -1,4 +1,4 @@
-from pymongo import MongoClient, ReturnDocument, ASCENDING
+from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import datetime
 from config import keys, defaultDB
