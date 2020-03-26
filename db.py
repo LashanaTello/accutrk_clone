@@ -297,4 +297,36 @@ class Database(object):
         else:
             return result, False
 
+    # unregisters student from the class whose subject, catalog, and section are the given parameters subject, catalog,
+    # and section respectively
+    # returns true true if student was unregistered from the class and the class was removed from the student's
+    # enrolled_list
+    # returns true, false if student was unregistered from the class and the class was not removed from the student's
+    # enrolled_list
+    # returns false, true if student was not unregistered from the class and the class was removed from the student's
+    # enrolled_list
+    # returns false, false if student was not unregistered from the class and the class was not removed from the
+    # student's enrolled_list
+    @staticmethod
+    def unregister_student(student_eid, student_first_name, student_last_name, subject, catalog, section):
+        class_result = Database.DATABASE["classes"].update_one({"subject": subject, "catalog": catalog,
+                                                                "section": section},
+                                                               {"$pull": {"class_roster":
+                                                                              {"student_eid": student_eid,
+                                                                               "student_first_name": student_first_name,
+                                                                               "student_last_name": student_last_name}}}
+                                                               )
 
+        student_result = Database.DATABASE["students"].update_one({"eid": student_eid},
+                                                                  {"$pull": {"enrolled_list":
+                                                                                 {"subject": subject,
+                                                                                  "catalog": catalog,
+                                                                                  "section": section}}})
+
+        if class_result.modified_count > 0 and student_result.modified_count > 0:
+            return True, True
+        elif class_result.modified_count > 0 and student_result.modified_count == 0:
+            return True, False
+        elif class_result.modified_count == 0 and student_result.modified_count > 0:
+            return False, True
+        return False, False
