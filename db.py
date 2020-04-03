@@ -25,7 +25,7 @@ class Database(object):
             print("Something went wrong")
 
     ####################################################################################################################
-    #                                                     main page methods
+    #                                                main page methods
     ####################################################################################################################
 
     # returns list of all students currently logged in
@@ -33,7 +33,7 @@ class Database(object):
     def list_all_logins():
         return Database.DATABASE[CURRENT_LOGINS].find({}, {"_id": 0})
 
-    # sign in/out process
+    # -----------------------------------------     sign in/out process     --------------------------------------------
 
     # reads user input and determines whether to sign a student in or out based on the user input
     @staticmethod
@@ -113,7 +113,7 @@ class Database(object):
         return False
 
     ####################################################################################################################
-    #                                                  students page methods
+    #                                              students page methods
     ####################################################################################################################
 
     # adds a student to database
