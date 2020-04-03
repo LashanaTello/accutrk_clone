@@ -24,7 +24,9 @@ class Database(object):
         except:
             print("Something went wrong")
 
-    # main page methods
+    ####################################################################################################################
+    #                                                     main page methods
+    ####################################################################################################################
 
     # returns list of all students currently logged in
     @staticmethod
@@ -110,7 +112,9 @@ class Database(object):
             return True
         return False
 
-    # students page methods
+    ####################################################################################################################
+    #                                                  students page methods
+    ####################################################################################################################
 
     # adds a student to database
     # returns true if student was added to system, returns false otherwise
@@ -184,7 +188,9 @@ class Database(object):
             return True
         return False
 
-    # Classes page methods
+    ####################################################################################################################
+    #                                               classes page methods
+    ####################################################################################################################
 
     # adds a class whose "subject" is subject, "catalog" is catalog, "section" is section and "professor" is professor
     # catalog defaults to "99999" and section defaults to "99" if neither is provided
@@ -261,7 +267,9 @@ class Database(object):
             return True
         return False
 
-    # professors page
+    ####################################################################################################################
+    #                                             professors page methods
+    ####################################################################################################################
 
     # adds professor to system
     # returns true if professor was added, returns false otherwise
@@ -322,7 +330,9 @@ class Database(object):
             return True
         return False
 
-    # register page
+    ####################################################################################################################
+    #                                             register page methods
+    ####################################################################################################################
 
     # returns a list of all classes and the students in them
     @staticmethod
@@ -407,7 +417,10 @@ class Database(object):
             return False, True
         return False, False
 
-    # session log page
+    ####################################################################################################################
+    #                                             login history page methods
+    ####################################################################################################################
+
     @staticmethod
     def show_login_history():
         return Database.DATABASE[LOGIN_HISTORY].find({}, {"_id": 0})
