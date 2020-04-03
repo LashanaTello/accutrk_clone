@@ -24,7 +24,86 @@ class Database(object):
     # returns list of all students currently logged in
     @staticmethod
     def list_all_logins():
-        return Database.DATABASE["current_logins"].find()
+        return Database.DATABASE["current_logins"].find({}, {"_id": 0})
+
+    # sign in/out process
+
+    # reads user input and determines whether to sign a student in or out based on the user input
+    @staticmethod
+    def evaluate_input(student_number):
+        if len(student_number) == 8:
+            result = Database.DATABASE["current_logins"].find_one({"eid": student_number}, {"_id": 0})
+        else:
+            result = Database.DATABASE["current_logins"].find_one({"barcode": student_number}, {"_id": 0})
+
+        if result is None:
+            return Database.get_info_for_sign_in(student_number)
+        else:
+            return Database.sign_out(student_number)
+
+    # returns all student information for student whose eid or barcode matches student_number
+    # the information returned contains the student's name, eid, barcode, and classes they're enrolled in
+    @staticmethod
+    def get_info_for_sign_in(student_number):
+        if len(student_number) == 8:
+            student_info = Database.DATABASE["students"].find_one({"eid": student_number},
+                                                                  {"_id": 0, "email": 0,
+                                                                   "enrolled_list.registered_by": 0,
+                                                                   "enrolled_list.registered_date": 0})
+        else:
+            student_info = Database.DATABASE["students"].find_one({"barcode": student_number},
+                                                                  {"_id": 0, "email": 0,
+                                                                   "enrolled_list.registered_by": 0,
+                                                                   "enrolled_list.registered_date": 0})
+
+        return student_info
+
+    # signs student in by adding them to the current_logins collection
+    @staticmethod
+    def sign_in(eid, barcode, first_name, last_name, subject, catalog, section, service):
+        login_time = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+        logout_time = ""
+        result = Database.DATABASE["current_logins"].insert_one({"eid": eid, "barcode": barcode,
+                                                                 "first_name": first_name, "last_name": last_name,
+                                                                 "subject": subject, "catalog": catalog,
+                                                                 "section": section, "login_time": login_time,
+                                                                 "logout_time": logout_time, "service": service})
+        if result.inserted_id is not None:
+            return True
+        return False
+
+    # signs student in by adding them to the current_logins collection
+    @staticmethod
+    def signn_in(student):
+        student["login_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+        student["logout_time"] = ""
+        result = Database.DATABASE["current_logins"].insert_one({"eid": student["eid"], "barcode": student["barcode"],
+                                                                 "first_name": student["first_name"],
+                                                                 "last_name": student["last_name"],
+                                                                 "subject": student["subject"],
+                                                                 "catalog": student["catalog"],
+                                                                 "section": student["section"],
+                                                                 "login_time": student["login_time"],
+                                                                 "logout_time": student["logout_time"],
+                                                                 "service": student["service"]})
+        if result.inserted_id is not None:
+            return True
+        return False
+
+    # signs student out by removing their current visit document from the current_logins collection and moving that
+    # document to the login_history collection
+    @staticmethod
+    def sign_out(student_number):
+        if len(student_number) == 8:
+            student_login = Database.DATABASE["current_logins"].find_one_and_delete({"eid": student_number})
+        else:
+            student_login = Database.DATABASE["current_logins"].find_one_and_delete({"barcode": student_number})
+
+        student_login["logout_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+        result = Database.DATABASE["login_history"].insert_one(student_login)
+        if result.inserted_id is not None:
+            return True
+        return False
 
     # students page methods
 
@@ -323,3 +402,8 @@ class Database(object):
         elif class_result.modified_count == 0 and student_result.modified_count > 0:
             return False, True
         return False, False
+
+    # session log page
+    @staticmethod
+    def show_login_history():
+        return Database.DATABASE["login_history"].find({}, {"_id": 0})
