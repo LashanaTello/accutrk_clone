@@ -66,15 +66,25 @@ class Database(object):
         return student_info
 
     # signs student in by adding them to the current_logins collection
+    # also adds login entries to the login_history collection when doing manual sign-ins
     @staticmethod
-    def sign_in(eid, barcode, first_name, last_name, subject, catalog, section, service):
-        login_time = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
-        logout_time = ""
-        result = Database.DATABASE[CURRENT_LOGINS].insert_one({"eid": eid, "barcode": barcode,
-                                                               "first_name": first_name, "last_name": last_name,
-                                                               "subject": subject, "catalog": catalog,
-                                                               "section": section, "login_time": login_time,
-                                                               "logout_time": logout_time, "service": service})
+    def sign_in(eid, barcode, first_name, last_name, subject, catalog, section, service, login_time="", logout_time=""):
+        if login_time == "" and logout_time == "":
+            login_time = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+
+        if logout_time == "":
+            result = Database.DATABASE[CURRENT_LOGINS].insert_one({"eid": eid, "barcode": barcode,
+                                                                   "first_name": first_name, "last_name": last_name,
+                                                                   "subject": subject, "catalog": catalog,
+                                                                   "section": section, "login_time": login_time,
+                                                                   "logout_time": logout_time, "service": service})
+        else:
+            result = Database.DATABASE[LOGIN_HISTORY].insert_one({"eid": eid, "barcode": barcode,
+                                                                  "first_name": first_name, "last_name": last_name,
+                                                                  "subject": subject, "catalog": catalog,
+                                                                  "section": section, "login_time": login_time,
+                                                                  "logout_time": logout_time, "service": service})
+
         if result.inserted_id is not None:
             return True
         return False
@@ -99,14 +109,18 @@ class Database(object):
 
     # signs student out by removing their current visit document from the current_logins collection and moving that
     # document to the login_history collection
+    # also used to manually sign out students without using input line on main page
     @staticmethod
-    def sign_out(student_number):
+    def sign_out(student_number, logout_time=""):
         if len(student_number) == 8:
             student_login = Database.DATABASE[CURRENT_LOGINS].find_one_and_delete({"eid": student_number})
         else:
             student_login = Database.DATABASE[CURRENT_LOGINS].find_one_and_delete({"barcode": student_number})
 
-        student_login["logout_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+        if logout_time == "":
+            student_login["logout_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+        else:
+            student_login["logout_time"] = logout_time
         result = Database.DATABASE[LOGIN_HISTORY].insert_one(student_login)
         if result.inserted_id is not None:
             return True
@@ -424,33 +438,3 @@ class Database(object):
     @staticmethod
     def show_login_history():
         return Database.DATABASE[LOGIN_HISTORY].find({}, {"_id": 0})
-
-    ####################################################################################################################
-    #                                             manual login page methods
-    ####################################################################################################################
-
-    # adds a login entry to the login_history collection
-    @staticmethod
-    def manual_history_sign_in(eid, barcode, first_name, last_name, subject, catalog, section, login_time, logout_time,
-                               service):
-        result = Database.DATABASE[LOGIN_HISTORY].insert_one({"eid": eid, "barcode": barcode,
-                                                              "first_name": first_name, "last_name": last_name,
-                                                              "subject": subject, "catalog": catalog,
-                                                              "section": section, "login_time": login_time,
-                                                              "logout_time": logout_time, "service": service})
-        if result.inserted_id is not None:
-            return True
-        return False
-
-    # adds a login entry to the current_logins collection
-    @staticmethod
-    def manual_current_sign_in(eid, barcode, first_name, last_name, subject, catalog, section, login_time, service):
-        logout_time = ""
-        result = Database.DATABASE[CURRENT_LOGINS].insert_one({"eid": eid, "barcode": barcode,
-                                                               "first_name": first_name, "last_name": last_name,
-                                                               "subject": subject, "catalog": catalog,
-                                                               "section": section, "login_time": login_time,
-                                                               "logout_time": logout_time, "service": service})
-        if result.inserted_id is not None:
-            return True
-        return False
