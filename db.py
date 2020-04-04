@@ -452,3 +452,34 @@ class Database(object):
     @staticmethod
     def show_login_history():
         return Database.DATABASE[LOGIN_HISTORY].find({}, {"_id": 0})
+
+    # edits the entries in the login_history collection
+    # returns true if original_login was successfully changed to edited_login, returns false otherwise
+    @staticmethod
+    def edit_login(original_login, edited_login):
+        result = Database.DATABASE[LOGIN_HISTORY].update_one({"eid": original_login["eid"],
+                                                              "barcode": original_login["barcode"],
+                                                              "first_name": original_login["first_name"],
+                                                              "last_name": original_login["last_name"],
+                                                              "subject": original_login["subject"],
+                                                              "catalog": original_login["catalog"],
+                                                              "section": original_login["section"],
+                                                              "login_time": original_login["login_time"],
+                                                              "logout_time": original_login["logout_time"],
+                                                              "service": original_login["service"]},
+                                                             {"$set":
+                                                                 {"eid": edited_login["eid"],
+                                                                  "barcode": edited_login["barcode"],
+                                                                  "first_name": edited_login["first_name"],
+                                                                  "last_name": edited_login["last_name"],
+                                                                  "subject": edited_login["subject"],
+                                                                  "catalog": edited_login["catalog"],
+                                                                  "section": edited_login["section"],
+                                                                  "login_time": edited_login["login_time"],
+                                                                  "logout_time": edited_login["logout_time"],
+                                                                  "service": edited_login["service"]}
+                                                              })
+
+        if result.modified_count > 0:
+            return True
+        return False
