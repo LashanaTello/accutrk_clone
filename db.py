@@ -468,18 +468,37 @@ class Database(object):
                                                               "logout_time": original_login["logout_time"],
                                                               "service": original_login["service"]},
                                                              {"$set":
-                                                                 {"eid": edited_login["eid"],
-                                                                  "barcode": edited_login["barcode"],
-                                                                  "first_name": edited_login["first_name"],
-                                                                  "last_name": edited_login["last_name"],
-                                                                  "subject": edited_login["subject"],
-                                                                  "catalog": edited_login["catalog"],
-                                                                  "section": edited_login["section"],
-                                                                  "login_time": edited_login["login_time"],
-                                                                  "logout_time": edited_login["logout_time"],
-                                                                  "service": edited_login["service"]}
+                                                                  {"eid": edited_login["eid"],
+                                                                   "barcode": edited_login["barcode"],
+                                                                   "first_name": edited_login["first_name"],
+                                                                   "last_name": edited_login["last_name"],
+                                                                   "subject": edited_login["subject"],
+                                                                   "catalog": edited_login["catalog"],
+                                                                   "section": edited_login["section"],
+                                                                   "login_time": edited_login["login_time"],
+                                                                   "logout_time": edited_login["logout_time"],
+                                                                   "service": edited_login["service"]}
                                                               })
 
         if result.modified_count > 0:
+            return True
+        return False
+
+    # removes a login entry from login_history collection
+    # returns true if login_to_remove is removed, returns false otherwise
+    @staticmethod
+    def remove_login(login_to_remove):
+        result = Database.DATABASE[LOGIN_HISTORY].delete_one({"eid": login_to_remove["eid"],
+                                                              "barcode": login_to_remove["barcode"],
+                                                              "first_name": login_to_remove["first_name"],
+                                                              "last_name": login_to_remove["last_name"],
+                                                              "subject": login_to_remove["subject"],
+                                                              "catalog": login_to_remove["catalog"],
+                                                              "section": login_to_remove["section"],
+                                                              "login_time": login_to_remove["login_time"],
+                                                              "logout_time": login_to_remove["logout_time"],
+                                                              "service": login_to_remove["service"]})
+
+        if result.deleted_count > 0:
             return True
         return False
