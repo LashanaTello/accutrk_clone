@@ -448,6 +448,7 @@ class Database(object):
     #                                             login history page methods
     ####################################################################################################################
 
+    # returns list of all logins
     @staticmethod
     def show_login_history():
         return Database.DATABASE[LOGIN_HISTORY].find({}, {"_id": 0})
