@@ -92,17 +92,30 @@ class Database(object):
     # signs student in by adding them to the current_logins collection
     @staticmethod
     def signn_in(student):
-        student["login_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
-        student["logout_time"] = ""
-        result = Database.DATABASE[CURRENT_LOGINS].insert_one({"eid": student["eid"], "barcode": student["barcode"],
-                                                               "first_name": student["first_name"],
-                                                               "last_name": student["last_name"],
-                                                               "subject": student["subject"],
-                                                               "catalog": student["catalog"],
-                                                               "section": student["section"],
-                                                               "login_time": student["login_time"],
-                                                               "logout_time": student["logout_time"],
-                                                               "service": student["service"]})
+        if student["login_time"] == "" and student["logout_time"] == "":
+            student["login_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+
+        if student["logout_time"] == "":
+            result = Database.DATABASE[CURRENT_LOGINS].insert_one({"eid": student["eid"], "barcode": student["barcode"],
+                                                                   "first_name": student["first_name"],
+                                                                   "last_name": student["last_name"],
+                                                                   "subject": student["subject"],
+                                                                   "catalog": student["catalog"],
+                                                                   "section": student["section"],
+                                                                   "login_time": student["login_time"],
+                                                                   "logout_time": student["logout_time"],
+                                                                   "service": student["service"]})
+        else:
+            result = Database.DATABASE[LOGIN_HISTORY].insert_one({"eid": student["eid"], "barcode": student["barcode"],
+                                                                  "first_name": student["first_name"],
+                                                                  "last_name": student["last_name"],
+                                                                  "subject": student["subject"],
+                                                                  "catalog": student["catalog"],
+                                                                  "section": student["section"],
+                                                                  "login_time": student["login_time"],
+                                                                  "logout_time": student["logout_time"],
+                                                                  "service": student["service"]})
+
         if result.inserted_id is not None:
             return True
         return False
