@@ -38,6 +38,7 @@ class MediaDatabase(object):
     def get_checkout_history():
         return MediaDatabase.DATABASE[MEDIA_CHECKOUT_HISTORY].find({}, {"_id": 0})
 
+    # returns true if media was added to database, returns false otherwise
     @staticmethod
     def add_media(new_media):
         result = MediaDatabase.DATABASE[MEDIA_LIST].update_one({"media_barcode": new_media["media_barcode"],
