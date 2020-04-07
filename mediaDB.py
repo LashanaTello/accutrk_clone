@@ -53,3 +53,14 @@ class MediaDatabase(object):
         if result.upserted_id is not None:
             return True
         return False
+
+    # returns true if media was deleted from database, returns false otherwise
+    @staticmethod
+    def remove_media(media):
+        result = MediaDatabase.DATABASE[MEDIA_LIST].delete_one({"media_barcode": media["media_barcode"],
+                                                                "media_title": media["media_title"],
+                                                                "media_type": media["media_type"]})
+
+        if result.deleted_count > 0:
+            return True
+        return False
