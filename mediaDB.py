@@ -64,3 +64,17 @@ class MediaDatabase(object):
         if result.deleted_count > 0:
             return True
         return False
+
+    # returns true if original_media is replaced with edited_media in the database, returns false otherwise
+    @staticmethod
+    def edit_media(original_media, edited_media):
+        result = MediaDatabase.DATABASE[MEDIA_LIST].update_one({"media_barcode": original_media["media_barcode"],
+                                                                "media_title": original_media["media_title"],
+                                                                "media_type": original_media["media_type"]},
+                                                               {"$set": {"media_barcode": edited_media["media_barcode"],
+                                                                         "media_title": edited_media["media_title"],
+                                                                         "media_type": edited_media["media_type"]}})
+
+        if result.modified_count > 0:
+            return True
+        return False
