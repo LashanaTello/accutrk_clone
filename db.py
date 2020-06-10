@@ -139,6 +139,20 @@ class Database(object):
             return True
         return False
 
+    # returns student eid, barcode, first_name and last_name that belongs to the student whose eid or barcode is
+    # student_id
+    @staticmethod
+    def get_student_data(student_id):
+        if len(student_id) == 8:
+            student_info = Database.DATABASE[STUDENTS].find_one({"eid": student_id}, {"_id": 0, "eid": 1, "barcode": 1,
+                                                                                      "first_name": 1, "last_name": 1})
+        else:
+            student_info = Database.DATABASE[STUDENTS].find_one({"barcode": student_id}, {"_id": 0, "eid": 1,
+                                                                                          "barcode": 1, "first_name": 1,
+                                                                                          "last_name": 1})
+
+        return student_info
+
     ####################################################################################################################
     #                                              students page methods
     ####################################################################################################################

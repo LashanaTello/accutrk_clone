@@ -6,6 +6,7 @@ from constants import MEDIA
 from constants import MEDIA_LIST
 from constants import CURRENT_MEDIA_CHECKOUTS
 from constants import MEDIA_CHECKOUT_HISTORY
+from db import Database
 
 
 class MediaDatabase(object):
@@ -76,5 +77,54 @@ class MediaDatabase(object):
                                                                          "media_type": edited_media["media_type"]}})
 
         if result.modified_count > 0:
+            return True
+        return False
+
+    # reads user media input and determines whether to check media in or out based on the user input
+    @staticmethod
+    def evaluate_media_input(media_barcode, student_info):
+        # check if media_barcode exists in MEDIA_LIST collection
+        wanted_media = MediaDatabase.DATABASE[MEDIA_LIST].find_one({"media_barcode": media_barcode}, {"_id": 0})
+        if wanted_media is None:
+            return False
+
+        # check if wanted_media is currently checked out
+        result = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find_one({"media_barcode": media_barcode}, {"_id": 0})
+
+        if result is None:
+            return MediaDatabase.check_out(wanted_media, student_info)
+        else:
+            return MediaDatabase.check_in(media_barcode)
+
+    # checks out media under student represented by student_info, meaning the media is in the student's possession
+    # returns true if media was checked out by the student, returns false otherwise
+    @staticmethod
+    def check_out(media, student_info):
+        result = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].insert_one(
+            {"media_barcode": media["media_barcode"],
+             "media_title": media["media_title"],
+             "media_type": media["media_type"],
+             "eid": student_info["eid"],
+             "barcode": student_info["barcode"],
+             "first_name": student_info["first_name"],
+             "last_name": student_info["last_name"],
+             "check_out_time": datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p"),
+             "check_in_time": ""})
+
+        if result.inserted_id is not None:
+            return True
+        return False
+
+    # checks in media that was borrowed by a student
+    # returns true if media was successfully removed from the current media checkout collection and its entry was moved
+    # to the checkout history collection
+    @staticmethod
+    def check_in(media_barcode):
+        check_out_entry = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find_one_and_delete(
+            {"media_barcode": media_barcode})
+
+        check_out_entry["check_in_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+        result = MediaDatabase.DATABASE[MEDIA_CHECKOUT_HISTORY].insert_one(check_out_entry)
+        if result.inserted_id is not None:
             return True
         return False
