@@ -2,11 +2,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import datetime
 from config import keys, defaultDB
-from constants import STUDENTS
-from constants import CLASSES
-from constants import PROFESSORS
-from constants import CURRENT_LOGINS
-from constants import LOGIN_HISTORY
+from constants import STUDENTS, CLASSES, PROFESSORS, CURRENT_LOGINS, LOGIN_HISTORY, SEMESTER
 
 
 class Database(object):
@@ -516,3 +512,95 @@ class Database(object):
         if result.deleted_count > 0:
             return True
         return False
+
+    ####################################################################################################################
+    #                                             semester page methods
+    ####################################################################################################################
+
+    # officially creates semester by adding semester_name, semester_start_date and semester_end_date to the
+    # semester collection in a new database whose name is semester_name
+    # returns true if that operation was successful, returns false if that operation was unsuccessful or if
+    # semester_name is the same as a previous semester
+    @staticmethod
+    def create_semester(semester_name, semester_start_date, semester_end_date):
+        if semester_name == "media" or semester_name == "local" or semester_name == "admin":
+            return False
+
+        client = MongoClient(Database.uri)
+        db_names = client.list_database_names()
+
+        # semester name must be unique
+        for db_name in db_names:
+            if db_name != "media" and db_name != "local" and db_name != "admin":
+                a_db = client[db_name]
+                semester = a_db[SEMESTER].find_one({}, {"_id": 0})
+                if semester is not None and (db_name == semester_name or semester["semester_name"] == semester_name):
+                    return False
+
+        new_db = client[semester_name]
+        result = new_db[SEMESTER].insert_one({"semester_name": semester_name,
+                                              "semester_start_date": semester_start_date,
+                                              "semester_end_date": semester_end_date})
+
+        if result.inserted_id is not None:
+            return True
+        return False
+
+    # returns list of all semesters with their start and end dates
+    @staticmethod
+    def get_all_semesters():
+        client = MongoClient(Database.uri)
+        db_names = client.list_database_names()
+        semesters = []
+        for db_name in db_names:
+            if db_name != "media" and db_name != "local" and db_name != "admin":
+                new_db = client[db_name]
+                semesters.append(new_db[SEMESTER].find_one({}, {"_id": 0}))
+
+        return semesters
+
+    # sets the current active semester to the semester named semester_name and returns true
+    @staticmethod
+    def set_semester(semester_name):
+        client = MongoClient(Database.uri)
+        db_names = client.list_database_names()
+        db_to_set = ""
+
+        for db_name in db_names:
+            if db_name != "media" and db_name != "local" and db_name != "admin":
+                new_db = client[db_name]
+                semester = new_db[SEMESTER].find_one({}, {"_id": 0})
+                if semester is not None and semester_name == semester["semester_name"]:
+                    db_to_set = db_name
+
+        # set default database name
+        f = open(defaultDB.dbNameFile, "w")
+        f.write(db_to_set)
+        f.close()
+
+        return True
+
+    # Edits any info about original_semester to match edited_semester and returns true if the change was
+    # successfully updated in the database
+    # returns true if that operation was successful, returns false otherwise
+    @staticmethod
+    def edit_semester(original_semester, edited_semester):
+        client = MongoClient(Database.uri)
+        db_names = client.list_database_names()
+        for db_name in db_names:
+            if db_name == original_semester["semester_name"]:
+                a_db = client[db_name]
+                result = a_db[SEMESTER].update_one({"semester_name": original_semester["semester_name"]},
+                                                   {"$set":
+                                                        {"semester_name": edited_semester["semester_name"],
+                                                         "semester_start_date": edited_semester["semester_start_date"],
+                                                         "semester_end_date": edited_semester["semester_end_date"]}})
+
+                if result.modified_count > 0:
+                    return True
+        return False
+
+    # returns name of semester
+    @staticmethod
+    def get_semester_name():
+        return Database.DATABASE[SEMESTER].find_one({}, {"_id": 0})["semester_name"]
