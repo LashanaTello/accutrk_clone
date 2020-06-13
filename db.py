@@ -26,7 +26,7 @@ class Database(object):
 
     # returns list of all students currently logged in
     @staticmethod
-    def list_all_logins():
+    def get_current_logins():
         return Database.DATABASE[CURRENT_LOGINS].find({}, {"_id": 0})
 
     # -----------------------------------------     sign in/out process     --------------------------------------------
@@ -460,7 +460,7 @@ class Database(object):
 
     # returns list of all logins
     @staticmethod
-    def show_login_history():
+    def get_login_history():
         return Database.DATABASE[LOGIN_HISTORY].find({}, {"_id": 0})
 
     # edits the entries in the login_history collection

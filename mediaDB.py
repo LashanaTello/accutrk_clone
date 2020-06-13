@@ -2,11 +2,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import datetime
 from config import keys
-from constants import MEDIA
-from constants import MEDIA_LIST
-from constants import CURRENT_MEDIA_CHECKOUTS
-from constants import MEDIA_CHECKOUT_HISTORY
-from db import Database
+from constants import MEDIA, MEDIA_LIST, CURRENT_MEDIA_CHECKOUTS, MEDIA_CHECKOUT_HISTORY
 
 
 class MediaDatabase(object):
