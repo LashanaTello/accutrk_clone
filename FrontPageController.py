@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtWidgets, uic, QtCore
 
 from FrontPage import Ui_MainWindow
+from CurrentlyLoggedInPageController import MainWindow as LoggedIn
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -14,13 +15,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.timer.timeout.connect(self.update_time)
         self.timer.start(1000)
 
+        self.logged_in = None
+
         self.initUI()
 
     def initUI(self):
         self.whosInButton.clicked.connect(self.whos_in_clicked)
 
     def whos_in_clicked(self):
-        self.whosInButton.setText("boo")
+        self.logged_in = LoggedIn()
+        self.logged_in.show()
 
     def update_time(self):
         self.currentTime.setDateTime(QtCore.QDateTime.currentDateTime())

@@ -33,7 +33,7 @@ class Ui_MainWindow(object):
         self.currentTime.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
         self.currentTime.setDate(QtCore.QDate(2020, 6, 18))
         self.currentTime.setMinimumTime(QtCore.QTime(0, 0, 0))
-        self.currentTime.setCurrentSection(QtWidgets.QDateTimeEdit.YearSection)
+        self.currentTime.setCurrentSection(QtWidgets.QDateTimeEdit.MonthSection)
         self.currentTime.setObjectName("currentTime")
         self.verticalLayout.addWidget(self.currentTime)
         spacerItem = QtWidgets.QSpacerItem(20, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
@@ -53,9 +53,9 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.mediaButton)
         spacerItem3 = QtWidgets.QSpacerItem(20, 15, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout.addItem(spacerItem3)
-        self.pushButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton)
+        self.eventsButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.eventsButton.setObjectName("eventsButton")
+        self.verticalLayout.addWidget(self.eventsButton)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Accutrack Clone"))
         self.logo.setText(_translate("MainWindow", "Accutrack Cloneeeee"))
         self.currentTime.setToolTip(_translate("MainWindow", "Current time"))
         self.currentTime.setDisplayFormat(_translate("MainWindow", "M/d/yy h:mm:ss AP"))
@@ -78,5 +78,5 @@ class Ui_MainWindow(object):
         self.whosInButton.setText(_translate("MainWindow", "Who\'s In?"))
         self.mediaButton.setToolTip(_translate("MainWindow", "Check out media under student\'s name or see all media currently checked out"))
         self.mediaButton.setText(_translate("MainWindow", "Media Checkout"))
-        self.pushButton.setToolTip(_translate("MainWindow", "Show events happening today"))
-        self.pushButton.setText(_translate("MainWindow", "Events"))
+        self.eventsButton.setToolTip(_translate("MainWindow", "Show events happening today"))
+        self.eventsButton.setText(_translate("MainWindow", "Events"))
