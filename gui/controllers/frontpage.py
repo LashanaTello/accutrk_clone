@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, QtCore
 from gui.FrontPage import Ui_MainWindow
 from gui.controllers.checked_in_list import CheckedInListPage
 from gui.controllers.events import EventDialog
-from gui.controllers.media_checkout import MediaCheckoutPage
+from gui.controllers.media_dialog import MediaCheckoutDialog
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -20,6 +20,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.logged_in = None
         self.event_dialog = None
         self.media_page = None
+        self.media_dialog = None
 
         self.init_ui()
 
@@ -37,8 +38,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.event_dialog.show()
 
     def media_button_clicked(self):
-        self.media_page = MediaCheckoutPage()
-        self.media_page.show()
+        # self.media_page = MediaCheckoutPage()
+        # self.media_page.show()
+        self.media_dialog = MediaCheckoutDialog()
+        self.media_dialog.show()
 
     def update_time(self):
         self.currentTime.setDateTime(QtCore.QDateTime.currentDateTime())
