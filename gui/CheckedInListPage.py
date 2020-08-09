@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'currentlyLoggedInPage.ui'
+# Form implementation generated from reading ui file 'checkedInListPage.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.0
 #

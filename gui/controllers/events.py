@@ -1,7 +1,7 @@
 import sys
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets
 
-from eventsPage import Ui_UpcomingEvents
+from gui.EventsPage import Ui_UpcomingEvents
 
 
 class EventDialog(QtWidgets.QDialogButtonBox, Ui_UpcomingEvents):
@@ -9,9 +9,9 @@ class EventDialog(QtWidgets.QDialogButtonBox, Ui_UpcomingEvents):
         super(EventDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         self.closeButton.clicked.connect(self.close_button_clicked)
 
     def close_button_clicked(self):

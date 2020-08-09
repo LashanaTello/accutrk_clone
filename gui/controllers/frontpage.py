@@ -1,10 +1,10 @@
 import sys
-from PyQt5 import QtWidgets, uic, QtCore
+from PyQt5 import QtWidgets, QtCore
 
-from FrontPage import Ui_MainWindow
-from CurrentlyLoggedInPageController import MainWindow as LoggedIn
-from eventsPageController import EventDialog
-from mediaCheckoutPageController import MediaCheckoutPage
+from gui.FrontPage import Ui_MainWindow
+from gui.controllers.checked_in_list import CheckedInListPage
+from gui.controllers.events import EventDialog
+from gui.controllers.media_checkout import MediaCheckoutPage
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -21,15 +21,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.event_dialog = None
         self.media_page = None
 
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         self.whosInButton.clicked.connect(self.whos_in_clicked)
         self.eventsButton.clicked.connect(self.events_button_clicked)
         self.mediaButton.clicked.connect(self.media_button_clicked)
 
     def whos_in_clicked(self):
-        self.logged_in = LoggedIn()
+        self.logged_in = CheckedInListPage()
         self.logged_in.show()
 
     def events_button_clicked(self):

@@ -1,17 +1,17 @@
 import sys
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets
 
-from currentlyLoggedInPage import Ui_MainWindow
+from gui.CheckedInListPage import Ui_MainWindow
 
 
-class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+class CheckedInListPage(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
-        super(MainWindow, self).__init__(*args, **kwargs)
+        super(CheckedInListPage, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         self.closeWindowButton.clicked.connect(self.close_button_clicked)
 
     def close_button_clicked(self):
@@ -21,6 +21,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
-    window = MainWindow()
+    window = CheckedInListPage()
     window.show()
     app.exec()

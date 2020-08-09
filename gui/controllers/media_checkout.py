@@ -1,7 +1,7 @@
 import sys
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets
 
-from MediaCheckoutPage import Ui_MainWindow
+from gui.MediaCheckoutPage import Ui_MainWindow
 
 
 class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -9,9 +9,9 @@ class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MediaCheckoutPage, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         self.closeButton.clicked.connect(self.close_button_clicked)
 
     def close_button_clicked(self):
