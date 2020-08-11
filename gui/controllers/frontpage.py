@@ -1,5 +1,5 @@
 import sys
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.FrontPage import Ui_MainWindow
 from gui.controllers.checked_in_list import CheckedInListPage
@@ -17,6 +17,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.timer.timeout.connect(self.update_time)
         self.timer.start(1000)
 
+        rx = QtCore.QRegExp("[a-zA-Z0-9]{8}|[a-zA-Z0-9]{14}")
+        validator = QtGui.QRegExpValidator(rx)
+        self.evalUserInputLine.setValidator(validator)
+
         self.logged_in = None
         self.event_dialog = None
         self.media_page = None
@@ -28,6 +32,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.whosInButton.clicked.connect(self.whos_in_clicked)
         self.eventsButton.clicked.connect(self.events_button_clicked)
         self.mediaButton.clicked.connect(self.media_button_clicked)
+        self.evalUserInputLine.textChanged.connect(self.handle_input_line_change)
+        self.evalUserInputLine.returnPressed.connect(self.handle_input_submit)
 
     def whos_in_clicked(self):
         self.logged_in = CheckedInListPage()
@@ -42,6 +48,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # self.media_page.show()
         self.media_dialog = MediaCheckoutDialog()
         self.media_dialog.show()
+
+    def handle_input_line_change(self, text):
+        print("contents changed to:", text)
+        print(self.evalUserInputLine.hasAcceptableInput())
+
+    def handle_input_submit(self):
+        print(self.evalUserInputLine.text())
 
     def update_time(self):
         self.currentTime.setDateTime(QtCore.QDateTime.currentDateTime())
