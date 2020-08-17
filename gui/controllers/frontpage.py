@@ -5,6 +5,8 @@ from gui.FrontPage import Ui_MainWindow
 from gui.controllers.checked_in_list import CheckedInListPage
 from gui.controllers.events import EventDialog
 from gui.controllers.media_dialog import MediaCheckoutDialog
+from gui.controllers.sign_in_dialog import SignInDialog
+from db import Database
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -20,11 +22,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         rx = QtCore.QRegExp("[a-zA-Z0-9]{8}|[a-zA-Z0-9]{14}")
         validator = QtGui.QRegExpValidator(rx)
         self.evalUserInputLine.setValidator(validator)
+        self.evalUserInputLine.setFocus()
 
         self.logged_in = None
         self.event_dialog = None
         self.media_page = None
         self.media_dialog = None
+        self.signin_dialog = None
 
         self.init_ui()
 
@@ -55,6 +59,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def handle_input_submit(self):
         print(self.evalUserInputLine.text())
+        self.signin_dialog = SignInDialog()
+        self.signin_dialog.show()
+        # print(Database.evaluate_input(self.evalUserInputLine.text()))
 
     def update_time(self):
         self.currentTime.setDateTime(QtCore.QDateTime.currentDateTime())
