@@ -6,7 +6,8 @@ from gui.controllers.checked_in_list import CheckedInListPage
 from gui.controllers.events import EventDialog
 from gui.controllers.media_dialog import MediaCheckoutDialog
 from gui.controllers.sign_in_dialog import SignInDialog
-from db import Database
+
+from server import Database
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -48,8 +49,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.event_dialog.show()
 
     def media_button_clicked(self):
-        # self.media_page = MediaCheckoutPage()
-        # self.media_page.show()
         self.media_dialog = MediaCheckoutDialog()
         self.media_dialog.show()
 
@@ -59,12 +58,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def handle_input_submit(self):
         print(self.evalUserInputLine.text())
-        self.signin_dialog = SignInDialog()
-        self.signin_dialog.show()
-        # print(Database.evaluate_input(self.evalUserInputLine.text()))
+        result = self.evaluate_input(self.evalUserInputLine.text())
+
+        if result == True:
+            print("signed out")
+        elif result == False:
+            print("couldn't sign out")
+        elif result is None:
+            print("nonexistent")
+        else:
+            self.signin_dialog = SignInDialog()
+            self.signin_dialog.fill_in(result)
+            self.signin_dialog.show()
 
     def update_time(self):
         self.currentTime.setDateTime(QtCore.QDateTime.currentDateTime())
+
+    def evaluate_input(self, student_id):
+        return Database.evaluate_input(student_id)
 
 
 app = QtWidgets.QApplication(sys.argv)
