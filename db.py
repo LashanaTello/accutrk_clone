@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 import datetime
 from config import keys, defaultDB
-from constants import STUDENTS, CLASSES, PROFESSORS, CURRENT_LOGINS, LOGIN_HISTORY, SEMESTER
+from constants import STUDENTS, CLASSES, PROFESSORS, CURRENT_LOGINS, LOGIN_HISTORY, SEMESTER, ACTIVITIES
 
 
 class Database(object):
@@ -604,3 +604,39 @@ class Database(object):
     @staticmethod
     def get_semester_name():
         return Database.DATABASE[SEMESTER].find_one({}, {"_id": 0})["semester_name"]
+
+    ####################################################################################################################
+    #                                             activity page methods
+    ####################################################################################################################
+
+    # returns True if activity was created and added to database, returns False otherwise
+    @staticmethod
+    def add_activity(activity):
+        found_doc = Database.DATABASE[ACTIVITIES].find_one({"activity": activity})
+        if found_doc is None:
+            Database.DATABASE[ACTIVITIES].insert_one({"activity": activity})
+            return True
+        return False
+
+    # returns list of all activities
+    @staticmethod
+    def get_all_activities():
+        return Database.DATABASE[ACTIVITIES].find({}, {"_id": 0})
+
+    # returns True if activity is changed to new_activity, returns False otherwise
+    @staticmethod
+    def edit_activity(activity, new_activity):
+        result = Database.DATABASE[ACTIVITIES].update_one({"activity": activity}, {"$set": {"activity": new_activity}})
+
+        if result.modified_count > 0:
+            return True
+        return False
+
+    # returns True if activity was deleted from database, returns False otherwise
+    @staticmethod
+    def remove_activity(activity):
+        result = Database.DATABASE[ACTIVITIES].delete_one({"activity": activity})
+
+        if result.deleted_count > 0:
+            return True
+        return False
