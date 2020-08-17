@@ -10,6 +10,7 @@ class MediaCheckoutDialog(QtWidgets.QDialog, Ui_MediaDialog):
         super(MediaCheckoutDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
+        self.studentIDInput.setFocus()
         # self.studentIDInput.setMaxLength(14)
         # validator = QtGui.QIntValidator()
         # self.studentIDInput.setValidator(validator)
