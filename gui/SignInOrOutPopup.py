@@ -14,12 +14,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(529, 220)
+        Form.resize(387, 113)
         self.successLabel = QtWidgets.QLabel(Form)
-        self.successLabel.setGeometry(QtCore.QRect(20, 20, 131, 31))
+        self.successLabel.setGeometry(QtCore.QRect(20, 20, 201, 31))
         self.successLabel.setObjectName("successLabel")
         self.studentNameLabel = QtWidgets.QLabel(Form)
-        self.studentNameLabel.setGeometry(QtCore.QRect(100, 80, 311, 17))
+        self.studentNameLabel.setGeometry(QtCore.QRect(100, 80, 351, 20))
         self.studentNameLabel.setObjectName("studentNameLabel")
         self.studentLabel = QtWidgets.QLabel(Form)
         self.studentLabel.setGeometry(QtCore.QRect(20, 80, 67, 17))
@@ -31,6 +31,6 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.successLabel.setText(_translate("Form", "SIGN IN SUCCESS"))
+        self.successLabel.setText(_translate("Form", "Message"))
         self.studentNameLabel.setText(_translate("Form", "studentName"))
         self.studentLabel.setText(_translate("Form", "Student:"))
