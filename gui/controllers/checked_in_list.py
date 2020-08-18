@@ -1,9 +1,9 @@
 import sys
 from PyQt5 import QtWidgets
-import pytz
 
 from gui.CheckedInListPage import Ui_MainWindow
 from server import Database
+from gui.helperfunctions.helpers import convert_time, combine_into_class
 
 
 class CheckedInListPage(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -24,11 +24,9 @@ class CheckedInListPage(QtWidgets.QMainWindow, Ui_MainWindow):
             print(student)
             self.loginList.setItem(count, 0, QtWidgets.QTableWidgetItem(student["last_name"]))
             self.loginList.setItem(count, 1, QtWidgets.QTableWidgetItem(student["first_name"]))
-            entry_time = student["login_time"]
-            localized = pytz.utc.localize(entry_time, is_dst=None).astimezone(pytz.timezone("US/Eastern"))
-            self.loginList.setItem(count, 2, QtWidgets.QTableWidgetItem(localized.strftime("%m/%d/%Y %I:%M:%S %p")))
+            self.loginList.setItem(count, 2, QtWidgets.QTableWidgetItem(convert_time(student["login_time"])))
             self.loginList.setItem(count, 3, QtWidgets.QTableWidgetItem(student["logout_time"]))
-            a_class = student["subject"] + " " + student["catalog"] + " - " + student["section"]
+            a_class = combine_into_class(student["subject"], student["catalog"], student["section"])
             self.loginList.setItem(count, 4, QtWidgets.QTableWidgetItem(a_class))
             self.loginList.setItem(count, 5, QtWidgets.QTableWidgetItem(student["service"]))
             count += 1
