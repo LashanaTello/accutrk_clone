@@ -22,7 +22,6 @@ class CheckedInListPage(QtWidgets.QMainWindow, Ui_MainWindow):
         self.numberOfStudents.setText(str(self.checked_in_list.count()))
         count = 0
         for student in self.checked_in_list:
-            print(student)
             self.loginList.setItem(count, 0, QtWidgets.QTableWidgetItem(student["last_name"]))
             self.loginList.setItem(count, 1, QtWidgets.QTableWidgetItem(student["first_name"]))
             self.loginList.setItem(count, 2, QtWidgets.QTableWidgetItem(convert_time(student["login_time"])))
