@@ -19,6 +19,7 @@ class CheckedInListPage(QtWidgets.QMainWindow, Ui_MainWindow):
         self.closeWindowButton.clicked.connect(self.close_button_clicked)
         self.checked_in_list = Database.get_current_logins()
         self.loginList.setRowCount(self.checked_in_list.count())
+        self.numberOfStudents.setText(str(self.checked_in_list.count()))
         count = 0
         for student in self.checked_in_list:
             print(student)
