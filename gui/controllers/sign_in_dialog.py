@@ -1,6 +1,5 @@
 import sys
 from PyQt5 import QtWidgets, QtCore
-import pytz
 import datetime
 
 from gui.SignInDialog import Ui_SignInDialog
