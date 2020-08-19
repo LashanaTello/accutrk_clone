@@ -1,5 +1,5 @@
 import sys
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 
 from gui.MediaCheckoutDialog import Ui_MediaDialog
 from gui.controllers.media_checkout import MediaCheckoutPage
@@ -11,9 +11,10 @@ class MediaCheckoutDialog(QtWidgets.QDialog, Ui_MediaDialog):
         self.setupUi(self)
 
         self.studentIDInput.setFocus()
-        # self.studentIDInput.setMaxLength(14)
-        # validator = QtGui.QIntValidator()
-        # self.studentIDInput.setValidator(validator)
+        rx = QtCore.QRegExp("[0-9]{8}|[0-9]{14}")
+        validator = QtGui.QRegExpValidator(rx)
+        self.studentIDInput.setValidator(validator)
+        self.studentIDInput.setFocus()
 
         self.media_checkout_page = None
 
