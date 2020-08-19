@@ -7,6 +7,7 @@ from gui.controllers.events import EventDialog
 from gui.controllers.media_dialog import MediaCheckoutDialog
 from gui.controllers.sign_in_dialog import SignInDialog
 from gui.controllers.sign_in_popup import SignInPopup
+from gui.controllers.register_popup import RegisterPopup
 
 from server import Database
 
@@ -32,6 +33,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.media_dialog = None
         self.signin_dialog = None
         self.signin_popup = None
+        self.register_popup = None
 
         self.init_ui()
 
@@ -76,6 +78,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             QtCore.QTimer.singleShot(6000, self.signin_popup.close)
             print("couldn't sign out")
         elif result is None:
+            self.register_popup = RegisterPopup()
+            self.register_popup.show()
             print("nonexistent")
         else:
             self.signin_dialog = SignInDialog()
