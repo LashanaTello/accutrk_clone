@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
 from pymongo.errors import ConnectionFailure
 import datetime
 from config import keys, defaultDB
@@ -247,6 +247,13 @@ class Database(object):
     @staticmethod
     def get_all_classes():
         return Database.DATABASE[CLASSES].find({}, {"_id": 0})
+
+    # returns list of all classes in system with just the subject, catalog, section and professor
+    @staticmethod
+    def get_all_class_names():
+        return Database.DATABASE[CLASSES].find({},
+                                               {"_id": 0, "subject": 1, "catalog": 1, "section": 1, "professor": 1})\
+            .sort([("subject", ASCENDING), ("catalog", ASCENDING), ("section", ASCENDING)])
 
     # changes the subject of the class whose subject, catalog, and section fields match the given parameters
     # the class's subject field will be set to new_subject
