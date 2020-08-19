@@ -26,6 +26,7 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
         self.firstnameInput.setValidator(validator)
 
         self.classes = []
+        self.class_set = set()
 
         self.init_ui()
 
@@ -42,17 +43,31 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
 
         self.classListComboBox.setCurrentIndex(-1)
 
-        self.classListComboBox.currentIndexChanged.connect(self.add_class_to_table)
+        self.classListComboBox.activated.connect(self.add_class_to_table)
+        self.classTable.itemDoubleClicked.connect(self.table_item_double_clicked)
+
+    def table_item_double_clicked(self):
+        selected_class = self.classTable.selectedItems()
+        tup = (selected_class[0].text(), selected_class[1].text(), selected_class[2].text())
+        self.class_set.remove(tup)
+        self.classTable.removeRow(self.classTable.currentRow())
 
     def add_class_to_table(self):
-        print(self.classes[self.classListComboBox.currentIndex()])
-        self.classTable.setRowCount(self.classTable.rowCount() + 1)
-        new_row_num = self.classTable.rowCount() - 1
-        new_entry = self.classes[self.classListComboBox.currentIndex()]
+        curr_class = self.classes[self.classListComboBox.currentIndex()]
+        new_entry = (curr_class["subject"], curr_class["catalog"], curr_class["section"])
+        if new_entry not in self.class_set:
+            self.class_set.add(new_entry)
+            self.classTable.clearContents()
+            self.classTable.setRowCount(len(self.class_set))
 
-        self.classTable.setItem(new_row_num, 0, QtWidgets.QTableWidgetItem(new_entry["subject"]))
-        self.classTable.setItem(new_row_num, 1, QtWidgets.QTableWidgetItem(new_entry["catalog"]))
-        self.classTable.setItem(new_row_num, 2, QtWidgets.QTableWidgetItem(new_entry["section"]))
+            count = 0
+            for a_class in self.class_set:
+                self.classTable.setItem(count, 0, QtWidgets.QTableWidgetItem(a_class[0]))
+                self.classTable.setItem(count, 1, QtWidgets.QTableWidgetItem(a_class[1]))
+                self.classTable.setItem(count, 2, QtWidgets.QTableWidgetItem(a_class[2]))
+                count += 1
+
+        self.classTable.sortItems(0, QtCore.Qt.AscendingOrder)
 
 
 if __name__ == '__main__':

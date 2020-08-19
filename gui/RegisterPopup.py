@@ -86,6 +86,9 @@ class Ui_Register(object):
         self.selectedClassesLabel.setObjectName("selectedClassesLabel")
         self.verticalLayout.addWidget(self.selectedClassesLabel)
         self.classTable = QtWidgets.QTableWidget(self.verticalLayoutWidget)
+        self.classTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.classTable.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.classTable.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.classTable.setObjectName("classTable")
         self.classTable.setColumnCount(4)
         self.classTable.setRowCount(0)
@@ -98,6 +101,8 @@ class Ui_Register(object):
         item = QtWidgets.QTableWidgetItem()
         self.classTable.setHorizontalHeaderItem(3, item)
         self.classTable.horizontalHeader().setDefaultSectionSize(143)
+        self.classTable.horizontalHeader().setMinimumSectionSize(143)
+        self.classTable.horizontalHeader().setSortIndicatorShown(True)
         self.verticalLayout.addWidget(self.classTable)
 
         self.retranslateUi(Register)
