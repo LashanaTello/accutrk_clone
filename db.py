@@ -132,8 +132,8 @@ class Database(object):
             student_login["logout_time"] = logout_time
         result = Database.DATABASE[LOGIN_HISTORY].insert_one(student_login)
         if result.inserted_id is not None:
-            return True
-        return False
+            return True, student_login["first_name"], student_login["last_name"]
+        return False, student_login["first_name"], student_login["last_name"]
 
     # returns student eid, barcode, first_name and last_name that belongs to the student whose eid or barcode is
     # student_id

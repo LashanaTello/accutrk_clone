@@ -6,6 +6,7 @@ from gui.controllers.checked_in_list import CheckedInListPage
 from gui.controllers.events import EventDialog
 from gui.controllers.media_dialog import MediaCheckoutDialog
 from gui.controllers.sign_in_dialog import SignInDialog
+from gui.controllers.sign_in_popup import SignInPopup
 
 from server import Database
 
@@ -30,6 +31,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.media_page = None
         self.media_dialog = None
         self.signin_dialog = None
+        self.signin_popup = None
 
         self.init_ui()
 
@@ -60,9 +62,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print(self.evalUserInputLine.text())
         result = self.evaluate_input(self.evalUserInputLine.text())
 
-        if result == True:
+        if type(result) is tuple and result[0] == True:
+            self.signin_popup = SignInPopup()
+            self.signin_popup.fill_in(result[1] + " " + result[2], "SIGN OUT SUCCESS")
+            self.signin_popup.show()
+            QtCore.QTimer.singleShot(5000, self.signin_popup.close)
+            self.evalUserInputLine.setText("")
             print("signed out")
-        elif result == False:
+        elif type(result) is tuple and result[0] == False:
             print("couldn't sign out")
         elif result is None:
             print("nonexistent")
@@ -70,6 +77,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.signin_dialog = SignInDialog()
             self.signin_dialog.fill_in(result)
             self.signin_dialog.show()
+            self.evalUserInputLine.setText("")
 
     def update_time(self):
         self.currentTime.setDateTime(QtCore.QDateTime.currentDateTime())
