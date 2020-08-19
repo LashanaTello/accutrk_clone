@@ -42,9 +42,9 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
 
         self.classListComboBox.setCurrentIndex(-1)
 
-        self.classListComboBox.currentIndexChanged.connect(self.look)
+        self.classListComboBox.currentIndexChanged.connect(self.add_class_to_table)
 
-    def look(self):
+    def add_class_to_table(self):
         print(self.classes[self.classListComboBox.currentIndex()])
         self.classTable.setRowCount(self.classTable.rowCount() + 1)
         new_row_num = self.classTable.rowCount() - 1
