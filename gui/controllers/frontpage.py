@@ -70,6 +70,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.evalUserInputLine.setText("")
             print("signed out")
         elif type(result) is tuple and result[0] == False:
+            self.signin_popup = SignInPopup()
+            self.signin_popup.fill_in(result[1] + " " + result[2], "SIGN OUT FAILURE")
+            self.signin_popup.show()
+            QtCore.QTimer.singleShot(6000, self.signin_popup.close)
             print("couldn't sign out")
         elif result is None:
             print("nonexistent")
