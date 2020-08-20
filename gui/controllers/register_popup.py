@@ -20,10 +20,14 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
         validator = QtGui.QRegExpValidator(rx)
         self.barcodeInput.setValidator(validator)
 
-        rx = QtCore.QRegExp("[-a-zA-Z]{25}")
+        rx = QtCore.QRegExp("[-a-zA-Z ]{25}")
         validator = QtGui.QRegExpValidator(rx)
         self.lastnameInput.setValidator(validator)
         self.firstnameInput.setValidator(validator)
+
+        rx = QtCore.QRegExp("^[a-z0-9+_.-]+@[a-z0-9.-]+$")
+        validator = QtGui.QRegExpValidator(rx)
+        self.emailInput.setValidator(validator)
 
         self.classes = []
         self.class_set = set()
@@ -43,7 +47,7 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
 
         self.classListComboBox.setCurrentIndex(-1)
 
-        self.classListComboBox.activated.connect(self.add_class_to_table)
+        self.classListComboBox.currentIndexChanged.connect(self.add_class_to_table)
         self.classTable.itemDoubleClicked.connect(self.table_item_double_clicked)
 
     def table_item_double_clicked(self):
@@ -67,7 +71,25 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
                 self.classTable.setItem(count, 2, QtWidgets.QTableWidgetItem(a_class[2]))
                 count += 1
 
+        # need to create custom sort
         self.classTable.sortItems(0, QtCore.Qt.AscendingOrder)
+
+    def accept(self) -> None:
+        print(self.IDInput.text())
+        print(self.barcodeInput.text())
+        print(self.firstnameInput.text())
+        print(self.lastnameInput.text())
+        print(self.emailInput.text())
+
+        count = 0
+        while count < self.classTable.rowCount():
+            self.classTable.selectRow(count)
+            selected_class = self.classTable.selectedItems()
+            print(selected_class[0].text())
+            print(selected_class[1].text())
+            print(selected_class[2].text())
+            count += 1
+        # add student to student collection and to the class rosters
 
 
 if __name__ == '__main__':
