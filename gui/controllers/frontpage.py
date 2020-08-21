@@ -57,7 +57,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.media_dialog.show()
 
     def handle_input_line_change(self, text):
-        print("contents changed to:", text)
         print(self.evalUserInputLine.hasAcceptableInput())
 
     def handle_input_submit(self):
