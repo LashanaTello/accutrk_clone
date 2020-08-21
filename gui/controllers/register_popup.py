@@ -55,6 +55,10 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
 
         self.classListComboBox.currentIndexChanged.connect(self.add_class_to_table)
         self.classTable.itemDoubleClicked.connect(self.table_item_double_clicked)
+        self.classListComboBox.editTextChanged.connect(self.combobox_text_changed)
+
+    def combobox_text_changed(self, text):
+        return self.classListComboBox.setEditText(text.upper())
 
     def table_item_double_clicked(self):
         selected_class = self.classTable.selectedItems()
