@@ -22,10 +22,12 @@ class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
     def close_button_clicked(self):
         self.close()
 
-    def fill_in(self, eid, first, last):
+    def fill_in(self, eid, barcode, first, last):
         self.studentIDInput.setText(eid)
+        self.studentBarcodeInput.setText(barcode)
         self.studentFirstNameInput.setText(first)
         self.studentLastNameInput.setText(last)
+        self.tableLabel.setText(first + " " + last + " has:")
         self.mediaIDInput.setFocus()
 
 

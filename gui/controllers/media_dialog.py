@@ -33,7 +33,7 @@ class MediaCheckoutDialog(QtWidgets.QDialog, Ui_MediaDialog):
 
     def accept(self) -> None:
         if self.studentIDInput.hasAcceptableInput():
-            result = Database.find_student(self.studentIDInput.text())
+            result = Database.get_student_data(self.studentIDInput.text())
             if result is None:
                 if len(self.studentIDInput.text()) == 8:
                     message = "No student with ID " + self.studentIDInput.text() + " found"
@@ -44,7 +44,8 @@ class MediaCheckoutDialog(QtWidgets.QDialog, Ui_MediaDialog):
                 return
             else:
                 self.media_checkout_page = MediaCheckoutPage()
-                self.media_checkout_page.fill_in(result["eid"], result["first_name"], result["last_name"])
+                self.media_checkout_page.fill_in(result["eid"], result["barcode"], result["first_name"],
+                                                 result["last_name"])
                 self.media_checkout_page.show()
                 self.hide()
 
