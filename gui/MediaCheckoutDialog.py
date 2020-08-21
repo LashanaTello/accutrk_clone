@@ -27,6 +27,10 @@ class Ui_MediaDialog(object):
         self.studentIDLabel = QtWidgets.QLabel(MediaDialog)
         self.studentIDLabel.setGeometry(QtCore.QRect(140, 20, 131, 17))
         self.studentIDLabel.setObjectName("studentIDLabel")
+        self.validInputMessage = QtWidgets.QLabel(MediaDialog)
+        self.validInputMessage.setGeometry(QtCore.QRect(50, 100, 311, 17))
+        self.validInputMessage.setText("")
+        self.validInputMessage.setObjectName("validInputMessage")
 
         self.retranslateUi(MediaDialog)
         self.buttonBox.accepted.connect(MediaDialog.accept)

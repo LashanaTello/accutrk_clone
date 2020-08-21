@@ -171,6 +171,16 @@ class Database(object):
     def get_all_students():
         return Database.DATABASE[STUDENTS].find({}, {"_id": 0})
 
+    # returns true if student with id_num as their eid or barcode exists in system, otherwise returns false
+    @staticmethod
+    def find_student(id_num):
+        if len(id_num) == 8:
+            result = Database.DATABASE[STUDENTS].find_one({"eid": id_num})
+        else:
+            result = Database.DATABASE[STUDENTS].find_one({"barcode": id_num})
+
+        return result
+
     # changes last name of student whose eid is an_eid
     # returns true if student"s last name is changed to new_last_name, returns false otherwise
     @staticmethod
