@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.RegisterPopup import Ui_Register
-from gui.controllers.sign_in_popup import SignInPopup
+from gui.controllers.message_popup import MessagePopup
 from gui.helperfunctions.helpers import combine_into_class
 from server import Database
 
@@ -96,7 +96,7 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
             self.IDInput.setFocus()
 
     def accept(self) -> None:
-        self.popup = SignInPopup()
+        self.popup = MessagePopup()
         if self.IDInput.text() == "" or (self.IDInput.text() == "" and self.barcodeInput.text() == ""):
             message = "Enter valid ID (8 digits) or barcode (14 digits)"
             self.popup.show_message(message)

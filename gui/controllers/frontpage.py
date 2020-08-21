@@ -6,7 +6,7 @@ from gui.controllers.checked_in_list import CheckedInListPage
 from gui.controllers.events import EventDialog
 from gui.controllers.media_dialog import MediaCheckoutDialog
 from gui.controllers.sign_in_dialog import SignInDialog
-from gui.controllers.sign_in_popup import SignInPopup
+from gui.controllers.message_popup import MessagePopup
 from gui.controllers.register_popup import RegisterPopup
 
 from server import Database
@@ -32,7 +32,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.media_page = None
         self.media_dialog = None
         self.signin_dialog = None
-        self.signin_popup = None
+        self.popup = None
         self.register_popup = None
 
         self.init_ui()
@@ -63,16 +63,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         result = self.evaluate_input(self.evalUserInputLine.text())
 
         if type(result) is tuple and result[0] == True:
-            self.signin_popup = SignInPopup()
-            self.signin_popup.fill_in(result[1] + " " + result[2], "SIGN OUT SUCCESS")
-            self.signin_popup.show()
-            QtCore.QTimer.singleShot(5000, self.signin_popup.close)
+            self.popup = MessagePopup()
+            self.popup.fill_in(result[1] + " " + result[2], "SIGN OUT SUCCESS")
+            self.popup.show()
+            QtCore.QTimer.singleShot(5000, self.popup.close)
             self.evalUserInputLine.setText("")
         elif type(result) is tuple and result[0] == False:
-            self.signin_popup = SignInPopup()
-            self.signin_popup.fill_in(result[1] + " " + result[2], "SIGN OUT FAILURE")
-            self.signin_popup.show()
-            QtCore.QTimer.singleShot(6000, self.signin_popup.close)
+            self.popup = MessagePopup()
+            self.popup.fill_in(result[1] + " " + result[2], "SIGN OUT FAILURE")
+            self.popup.show()
+            QtCore.QTimer.singleShot(6000, self.popup.close)
         elif result is None:
             self.register_popup = RegisterPopup()
             self.register_popup.take_id(self.evalUserInputLine.text())

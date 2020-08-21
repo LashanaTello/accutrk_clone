@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets, QtGui, QtCore
 
 from gui.MediaCheckoutDialog import Ui_MediaDialog
-from gui.controllers.sign_in_popup import SignInPopup
+from gui.controllers.message_popup import MessagePopup
 from gui.controllers.media_checkout import MediaCheckoutPage
 from server import Database
 
@@ -39,7 +39,7 @@ class MediaCheckoutDialog(QtWidgets.QDialog, Ui_MediaDialog):
                     message = "No student with ID " + self.studentIDInput.text() + " found"
                 else:
                     message = "No student with barcode " + self.studentIDInput.text() + " found"
-                self.popup = SignInPopup()
+                self.popup = MessagePopup()
                 self.popup.show_message(message)
                 return
             else:

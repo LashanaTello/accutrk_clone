@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets, QtCore
 import datetime
 
 from gui.SignInDialog import Ui_SignInDialog
-from gui.controllers.sign_in_popup import SignInPopup
+from gui.controllers.message_popup import MessagePopup
 
 from server import Database
 
@@ -42,7 +42,7 @@ class SignInDialog(QtWidgets.QDialog, Ui_SignInDialog):
                    }
 
         if Database.signn_in(student):
-            self.popup = SignInPopup()
+            self.popup = MessagePopup()
             self.popup.fill_in(self.studentNameLabel.text(), "SIGN IN SUCCESS")
             self.popup.show()
             self.close()

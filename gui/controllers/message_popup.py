@@ -1,12 +1,12 @@
 import sys
 from PyQt5 import QtWidgets
 
-from gui.SignInOrOutPopup import Ui_Form
+from gui.MessagePopup import Ui_MessagePopup
 
 
-class SignInPopup(QtWidgets.QDialog, Ui_Form):
+class MessagePopup(QtWidgets.QDialog, Ui_MessagePopup):
     def __init__(self, *args, obj=None, **kwargs):
-        super(SignInPopup, self).__init__(*args, **kwargs)
+        super(MessagePopup, self).__init__(*args, **kwargs)
         self.setupUi(self)
         self.init_ui()
 
@@ -31,6 +31,6 @@ class SignInPopup(QtWidgets.QDialog, Ui_Form):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
-    window = SignInPopup()
+    window = MessagePopup()
     window.show()
     app.exec()
