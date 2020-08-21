@@ -61,7 +61,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print(self.evalUserInputLine.hasAcceptableInput())
 
     def handle_input_submit(self):
-        print(self.evalUserInputLine.text())
         result = self.evaluate_input(self.evalUserInputLine.text())
 
         if type(result) is tuple and result[0] == True:
@@ -70,18 +69,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.signin_popup.show()
             QtCore.QTimer.singleShot(5000, self.signin_popup.close)
             self.evalUserInputLine.setText("")
-            print("signed out")
         elif type(result) is tuple and result[0] == False:
             self.signin_popup = SignInPopup()
             self.signin_popup.fill_in(result[1] + " " + result[2], "SIGN OUT FAILURE")
             self.signin_popup.show()
             QtCore.QTimer.singleShot(6000, self.signin_popup.close)
-            print("couldn't sign out")
         elif result is None:
             self.register_popup = RegisterPopup()
             self.register_popup.take_id(self.evalUserInputLine.text())
             self.register_popup.show()
-            print("nonexistent")
         else:
             self.signin_dialog = SignInDialog()
             self.signin_dialog.fill_in(result)
