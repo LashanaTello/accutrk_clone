@@ -79,6 +79,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             print("couldn't sign out")
         elif result is None:
             self.register_popup = RegisterPopup()
+            self.register_popup.take_id(self.evalUserInputLine.text())
             self.register_popup.show()
             print("nonexistent")
         else:

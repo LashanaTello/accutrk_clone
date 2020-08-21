@@ -252,7 +252,7 @@ class Database(object):
     @staticmethod
     def get_all_class_names():
         return Database.DATABASE[CLASSES].find({},
-                                               {"_id": 0, "subject": 1, "catalog": 1, "section": 1, "professor": 1})\
+                                               {"_id": 0, "subject": 1, "catalog": 1, "section": 1, "professor": 1}) \
             .sort([("subject", ASCENDING), ("catalog", ASCENDING), ("section", ASCENDING)])
 
     # changes the subject of the class whose subject, catalog, and section fields match the given parameters
@@ -385,10 +385,7 @@ class Database(object):
 
     # registers student for a class by adding student to a class's class_roster field
     # returns (true, true) if student with eid "student_eid" was registered to the class whose subject, catalog and
-    # section are "subject", "catalog" and "section" respectively,
-    # returns (false, false) if student was not registered and did not have their enrolled_list updated,
-    # returns (true, false) if student was registered for class but their enrolled_list was not updated,
-    # returns (false, true) if student was not registered but their enrolled_list was updated
+    # section are "subject", "catalog" and "section" respectively
     @staticmethod
     def register_student(student_eid, student_first_name, student_last_name, subject, catalog, section):
         # registers student by adding student info to class's class_roster field
@@ -399,6 +396,10 @@ class Database(object):
                                                                  {"student_eid": student_eid,
                                                                   "student_first_name": student_first_name,
                                                                   "student_last_name": student_last_name}}})
+
+        # if nothing was modified, then the class you're trying to register the student for doesn't exist
+        if result.modified_count == 0:
+            return False
 
         # adds class info and registration info to student's enrolled_list field
         # student_result tells you whether or not the student's enrolled_list was updated
@@ -421,11 +422,7 @@ class Database(object):
 
         if result.modified_count > 0 and student_result.modified_count > 0:
             return True, True
-        elif result.modified_count > 0 and student_result.modified_count == 0:
-            return True, False
-        elif result.modified_count == 0 and student_result.modified_count > 0:
-            return False, True
-        return False, False
+        return True, False  # student already registered for this class or student does not exist
 
     # unregisters student from the class whose subject, catalog, and section are the given parameters subject, catalog,
     # and section respectively
