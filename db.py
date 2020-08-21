@@ -171,7 +171,7 @@ class Database(object):
     def get_all_students():
         return Database.DATABASE[STUDENTS].find({}, {"_id": 0})
 
-    # returns true if student with id_num as their eid or barcode exists in system, otherwise returns false
+    # returns student info if student with id_num as their eid or barcode exists in system, otherwise returns None
     @staticmethod
     def find_student(id_num):
         if len(id_num) == 8:
