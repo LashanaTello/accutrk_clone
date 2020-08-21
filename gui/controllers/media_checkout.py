@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.MediaCheckoutPage import Ui_MainWindow
+from gui.controllers.media_list_popup import MediaListPopup
 
 
 class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -14,13 +15,32 @@ class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
         self.mediaIDInput.setValidator(validator)
         self.mediaIDInput.setFocus()
 
+        self.media_popup = None
+
         self.init_ui()
 
     def init_ui(self):
         self.closeButton.clicked.connect(self.close_button_clicked)
+        self.outMediaButton.clicked.connect(self.out_button_clicked)
+        self.availableMediaButton.clicked.connect(self.available_button_clicked)
+        self.allMediaButton.clicked.connect(self.all_button_clicked)
 
     def close_button_clicked(self):
         self.close()
+
+    def out_button_clicked(self):
+        self.media_popup = MediaListPopup()
+        self.media_popup.setWindowTitle("Media Out")
+        self.media_popup.show()
+
+    def available_button_clicked(self):
+        self.media_popup = MediaListPopup()
+        self.media_popup.setWindowTitle("Available Media")
+        self.media_popup.show()
+
+    def all_button_clicked(self):
+        self.media_popup = MediaListPopup()
+        self.media_popup.show()
 
     def fill_in(self, eid, barcode, first, last):
         self.studentIDInput.setText(eid)
