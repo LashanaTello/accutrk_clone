@@ -30,16 +30,17 @@ class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def out_button_clicked(self):
         self.media_popup = MediaListPopup()
-        self.media_popup.setWindowTitle("Media Out")
+        self.media_popup.show_out_media()
         self.media_popup.show()
 
     def available_button_clicked(self):
         self.media_popup = MediaListPopup()
-        self.media_popup.setWindowTitle("Available Media")
+        self.media_popup.show_available_media()
         self.media_popup.show()
 
     def all_button_clicked(self):
         self.media_popup = MediaListPopup()
+        self.media_popup.show_all_media()
         self.media_popup.show()
 
     def fill_in(self, eid, barcode, first, last):

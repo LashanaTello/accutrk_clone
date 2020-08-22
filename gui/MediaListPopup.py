@@ -28,7 +28,7 @@ class Ui_MediaListPopup(object):
         self.mediaTable.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
         self.mediaTable.setHorizontalHeaderItem(2, item)
-        self.mediaTable.horizontalHeader().setDefaultSectionSize(247)
+        self.mediaTable.horizontalHeader().setDefaultSectionSize(244)
         self.closeButton = QtWidgets.QPushButton(MediaListPopup)
         self.closeButton.setGeometry(QtCore.QRect(710, 20, 99, 27))
         self.closeButton.setObjectName("closeButton")
