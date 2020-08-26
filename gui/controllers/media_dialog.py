@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from gui.MediaCheckoutDialog import Ui_MediaDialog
 from gui.controllers.message_popup import MessagePopup
 from gui.controllers.media_checkout import MediaCheckoutPage
-from server import Database
+from server import Database, MediaDatabase
 
 
 class MediaCheckoutDialog(QtWidgets.QDialog, Ui_MediaDialog):
@@ -32,7 +32,7 @@ class MediaCheckoutDialog(QtWidgets.QDialog, Ui_MediaDialog):
             self.validInputMessage.setText("")
 
     def accept(self) -> None:
-        if self.studentIDInput.hasAcceptableInput():
+        if self.studentIDInput.hasAcceptableInput() or self.studentIDInput.text() == "":
             result = Database.get_student_data(self.studentIDInput.text())
             if result is None:
                 if len(self.studentIDInput.text()) == 8:
@@ -43,9 +43,10 @@ class MediaCheckoutDialog(QtWidgets.QDialog, Ui_MediaDialog):
                 self.popup.show_message(message)
                 return
             else:
+                checkouts = MediaDatabase.get_student_checkouts(result["eid"])
                 self.media_checkout_page = MediaCheckoutPage()
-                self.media_checkout_page.fill_in(result["eid"], result["barcode"], result["first_name"],
-                                                 result["last_name"])
+                self.media_checkout_page.enter_data(result["eid"], result["barcode"], result["first_name"],
+                                                    result["last_name"], checkouts)
                 self.media_checkout_page.show()
                 self.hide()
 

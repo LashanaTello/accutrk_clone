@@ -14,10 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MediaListPopup(object):
     def setupUi(self, MediaListPopup):
         MediaListPopup.setObjectName("MediaListPopup")
-        MediaListPopup.resize(829, 640)
+        MediaListPopup.resize(1171, 607)
         MediaListPopup.setModal(True)
         self.mediaTable = QtWidgets.QTableWidget(MediaListPopup)
-        self.mediaTable.setGeometry(QtCore.QRect(40, 80, 751, 521))
+        self.mediaTable.setGeometry(QtCore.QRect(40, 80, 1091, 491))
+        self.mediaTable.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.mediaTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.mediaTable.setObjectName("mediaTable")
         self.mediaTable.setColumnCount(3)
@@ -28,9 +29,11 @@ class Ui_MediaListPopup(object):
         self.mediaTable.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
         self.mediaTable.setHorizontalHeaderItem(2, item)
-        self.mediaTable.horizontalHeader().setDefaultSectionSize(244)
+        self.mediaTable.horizontalHeader().setCascadingSectionResizes(False)
+        self.mediaTable.horizontalHeader().setDefaultSectionSize(360)
+        self.mediaTable.horizontalHeader().setMinimumSectionSize(120)
         self.closeButton = QtWidgets.QPushButton(MediaListPopup)
-        self.closeButton.setGeometry(QtCore.QRect(710, 20, 99, 27))
+        self.closeButton.setGeometry(QtCore.QRect(1030, 20, 99, 27))
         self.closeButton.setObjectName("closeButton")
 
         self.retranslateUi(MediaListPopup)

@@ -76,9 +76,19 @@ class MediaDatabase(object):
             return True
         return False
 
+    # returns list of all media student currently has out
+    @staticmethod
+    def get_student_checkouts(student_id):
+        if len(student_id) == 8:
+            student_check_outs = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find({"eid": student_id}, {"_id": 0})
+        else:
+            student_check_outs = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find({"barcode": student_id},
+                                                                                      {"_id": 0})
+        return student_check_outs
+
     # reads user media input and determines whether to check media in or out based on the user input
     @staticmethod
-    def evaluate_media_input(media_barcode, student_info):
+    def evaluate_media_input(media_barcode):
         # check if media_barcode exists in MEDIA_LIST collection
         wanted_media = MediaDatabase.DATABASE[MEDIA_LIST].find_one({"media_barcode": media_barcode}, {"_id": 0})
         if wanted_media is None:
@@ -88,9 +98,11 @@ class MediaDatabase(object):
         result = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find_one({"media_barcode": media_barcode}, {"_id": 0})
 
         if result is None:
-            return MediaDatabase.check_out(wanted_media, student_info)
+            return "out", wanted_media
         else:
-            return MediaDatabase.check_in(media_barcode)
+            student_check_outs = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find(
+                {"$or": [{"eid": result["eid"]}, {"barcode": result["barcode"]}]}, {"_id": 0})
+            return "in", result, student_check_outs
 
     # checks out media under student represented by student_info, meaning the media is in the student's possession
     # returns true if media was checked out by the student, returns false otherwise
@@ -104,7 +116,7 @@ class MediaDatabase(object):
              "barcode": student_info["barcode"],
              "first_name": student_info["first_name"],
              "last_name": student_info["last_name"],
-             "check_out_time": datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p"),
+             "check_out_time": datetime.datetime.utcnow(),
              "check_in_time": ""})
 
         if result.inserted_id is not None:
@@ -119,7 +131,7 @@ class MediaDatabase(object):
         check_out_entry = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find_one_and_delete(
             {"media_barcode": media_barcode})
 
-        check_out_entry["check_in_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+        check_out_entry["check_in_time"] = datetime.datetime.utcnow()
         result = MediaDatabase.DATABASE[MEDIA_CHECKOUT_HISTORY].insert_one(check_out_entry)
         if result.inserted_id is not None:
             return True
