@@ -30,6 +30,14 @@ class MediaListPopup(QtWidgets.QDialog, Ui_MediaListPopup):
 
     def show_available_media(self):
         self.setWindowTitle("Available Media")
+        available_media = MediaDatabase.get_available_list()
+        for media in available_media:
+            self.mediaTable.setRowCount(self.mediaTable.rowCount() + 1)
+            row = self.mediaTable.rowCount() - 1
+            self.mediaTable.setItem(row, 0, QtWidgets.QTableWidgetItem(media["media_barcode"]))
+            self.mediaTable.setItem(row, 1, QtWidgets.QTableWidgetItem(media["media_title"]))
+            self.mediaTable.setItem(row, 2, QtWidgets.QTableWidgetItem(media["media_type"]))
+        self.mediaTable.sortItems(1, 0)
 
     def show_out_media(self):
         self.setWindowTitle("Media Out")

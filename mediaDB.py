@@ -30,6 +30,11 @@ class MediaDatabase(object):
     def get_checkout_list():
         return MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find({}, {"_id": 0})
 
+    # returns list of all media currently available
+    @staticmethod
+    def get_available_list():
+        return MediaDatabase.DATABASE[MEDIA_LIST].find({"checked_out": False}, {"_id": 0})
+
     # returns list detailing every time a piece of media was ever checked out
     @staticmethod
     def get_checkout_history():
@@ -38,17 +43,16 @@ class MediaDatabase(object):
     # returns true if media was added to database, returns false otherwise
     @staticmethod
     def add_media(new_media):
-        result = MediaDatabase.DATABASE[MEDIA_LIST].update_one({"media_barcode": new_media["media_barcode"],
-                                                                "media_title": new_media["media_title"],
-                                                                "media_type": new_media["media_type"]},
-                                                               {"$set":
-                                                                    {"media_barcode": new_media["media_barcode"],
-                                                                     "media_title": new_media["media_title"],
-                                                                     "media_type": new_media["media_type"]}},
-                                                               upsert=True)
-
-        if result.upserted_id is not None:
-            return True
+        found_doc = MediaDatabase.DATABASE[MEDIA_LIST].find_one({"media_barcode": new_media["media_barcode"],
+                                                                 "media_title": new_media["media_title"],
+                                                                 "media_type": new_media["media_type"]})
+        if found_doc is None:
+            result = MediaDatabase.DATABASE[MEDIA_LIST].insert_one({"media_barcode": new_media["media_barcode"],
+                                                                    "media_title": new_media["media_title"],
+                                                                    "media_type": new_media["media_type"],
+                                                                    "checked_out": False})
+            if result.inserted_id is not None:
+                return True
         return False
 
     # returns true if media was deleted from database, returns false otherwise
@@ -120,7 +124,10 @@ class MediaDatabase(object):
              "check_in_time": ""})
 
         if result.inserted_id is not None:
-            return True
+            update = MediaDatabase.DATABASE[MEDIA_LIST].update_one({"media_barcode": media["media_barcode"]},
+                                                                   {"$set": {"checked_out": True}})
+            if update.modified_count > 0:
+                return True
         return False
 
     # checks in media that was borrowed by a student
@@ -130,9 +137,12 @@ class MediaDatabase(object):
     def check_in(media_barcode):
         check_out_entry = MediaDatabase.DATABASE[CURRENT_MEDIA_CHECKOUTS].find_one_and_delete(
             {"media_barcode": media_barcode})
+        update = MediaDatabase.DATABASE[MEDIA_LIST].update_one({"media_barcode": media_barcode},
+                                                               {"$set": {"checked_out": False}})
 
         check_out_entry["check_in_time"] = datetime.datetime.utcnow()
         result = MediaDatabase.DATABASE[MEDIA_CHECKOUT_HISTORY].insert_one(check_out_entry)
         if result.inserted_id is not None:
-            return True
+            if update.modified_count > 0:
+                return True
         return False
