@@ -45,6 +45,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.mediaButton.clicked.connect(self.media_button_clicked)
         self.evalUserInputLine.textChanged.connect(self.handle_input_line_change)
         self.evalUserInputLine.returnPressed.connect(self.handle_input_submit)
+        self.userInput.returnPressed.connect(self.handle_password_submit)
 
     def whos_in_clicked(self):
         self.logged_in = CheckedInListPage()
@@ -62,34 +63,41 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print(self.evalUserInputLine.hasAcceptableInput())
 
     def handle_input_submit(self):
-        result = self.evaluate_input(self.evalUserInputLine.text())
+        if self.evalUserInputLine.text().isalpha():
+            self.evalUserInputLine.setReadOnly(True)
+            self.userInput.show()
+        elif self.evalUserInputLine.text().isdigit():
+            result = self.evaluate_input(self.evalUserInputLine.text())
 
-        if type(result) is tuple and result[0] == True:
-            self.popup = MessagePopup()
-            self.popup.fill_in(result[1] + " " + result[2], "SIGN OUT SUCCESS")
-            self.popup.show()
-            QtCore.QTimer.singleShot(5000, self.popup.close)
-            self.evalUserInputLine.setText("")
-        elif type(result) is tuple and result[0] == False:
-            self.popup = MessagePopup()
-            self.popup.fill_in(result[1] + " " + result[2], "SIGN OUT FAILURE")
-            self.popup.show()
-            QtCore.QTimer.singleShot(6000, self.popup.close)
-        elif result is None:
-            self.register_popup = RegisterPopup()
-            self.register_popup.take_id(self.evalUserInputLine.text())
-            self.register_popup.show()
-        else:
-            self.signin_dialog = SignInDialog()
-            self.signin_dialog.fill_in(result)
-            self.signin_dialog.show()
-            self.evalUserInputLine.setText("")
+            if type(result) is tuple and result[0] == True:
+                self.popup = MessagePopup()
+                self.popup.fill_in(result[1] + " " + result[2], "SIGN OUT SUCCESS")
+                self.popup.show()
+                QtCore.QTimer.singleShot(5000, self.popup.close)
+                self.evalUserInputLine.setText("")
+            elif type(result) is tuple and result[0] == False:
+                self.popup = MessagePopup()
+                self.popup.fill_in(result[1] + " " + result[2], "SIGN OUT FAILURE")
+                self.popup.show()
+                QtCore.QTimer.singleShot(6000, self.popup.close)
+            elif result is None:
+                self.register_popup = RegisterPopup()
+                self.register_popup.take_id(self.evalUserInputLine.text())
+                self.register_popup.show()
+            else:
+                self.signin_dialog = SignInDialog()
+                self.signin_dialog.fill_in(result)
+                self.signin_dialog.show()
+                self.evalUserInputLine.setText("")
 
     def update_time(self):
         self.currentTime.setDateTime(QtCore.QDateTime.currentDateTime())
 
     def evaluate_input(self, student_id):
         return Database.evaluate_input(student_id)
+
+    def handle_password_submit(self):
+        print("called")
 
 
 app = QtWidgets.QApplication(sys.argv)
