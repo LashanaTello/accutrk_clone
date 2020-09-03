@@ -2,7 +2,7 @@ from pymongo import MongoClient, ASCENDING
 from pymongo.errors import ConnectionFailure
 import datetime
 from config import keys, defaultDB
-from constants import STUDENTS, CLASSES, PROFESSORS, CURRENT_LOGINS, LOGIN_HISTORY, SEMESTER, ACTIVITIES
+from constants import STUDENTS, CLASSES, PROFESSORS, CURRENT_LOGINS, LOGIN_HISTORY, SEMESTER, SERVICES
 
 
 class Database(object):
@@ -610,36 +610,36 @@ class Database(object):
         return Database.DATABASE[SEMESTER].find_one({}, {"_id": 0})["semester_name"]
 
     ####################################################################################################################
-    #                                             activity page methods
+    #                                             service page methods
     ####################################################################################################################
 
-    # returns True if activity was created and added to database, returns False otherwise
+    # returns True if service was created and added to database, returns False otherwise
     @staticmethod
-    def add_activity(activity):
-        found_doc = Database.DATABASE[ACTIVITIES].find_one({"activity": activity})
+    def add_service(service):
+        found_doc = Database.DATABASE[SERVICES].find_one({"service": service})
         if found_doc is None:
-            Database.DATABASE[ACTIVITIES].insert_one({"activity": activity})
+            Database.DATABASE[SERVICES].insert_one({"service": service})
             return True
         return False
 
-    # returns list of all activities
+    # returns list of all services
     @staticmethod
-    def get_all_activities():
-        return Database.DATABASE[ACTIVITIES].find({}, {"_id": 0})
+    def get_all_services():
+        return Database.DATABASE[SERVICES].find({}, {"_id": 0})
 
-    # returns True if activity is changed to new_activity, returns False otherwise
+    # returns True if service is changed to new_service, returns False otherwise
     @staticmethod
-    def edit_activity(activity, new_activity):
-        result = Database.DATABASE[ACTIVITIES].update_one({"activity": activity}, {"$set": {"activity": new_activity}})
+    def edit_service(service, new_service):
+        result = Database.DATABASE[SERVICES].update_one({"service": service}, {"$set": {"service": new_service}})
 
         if result.modified_count > 0:
             return True
         return False
 
-    # returns True if activity was deleted from database, returns False otherwise
+    # returns True if service was deleted from database, returns False otherwise
     @staticmethod
-    def remove_activity(activity):
-        result = Database.DATABASE[ACTIVITIES].delete_one({"activity": activity})
+    def remove_service(service):
+        result = Database.DATABASE[SERVICES].delete_one({"service": service})
 
         if result.deleted_count > 0:
             return True

@@ -17,6 +17,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
+        self.userInput.hide()
+
         self.update_time()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_time)

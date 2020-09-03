@@ -38,7 +38,7 @@ class SignInDialog(QtWidgets.QDialog, Ui_SignInDialog):
                    "first_name": self.student_name["first"], "last_name": self.student_name["last"],
                    "subject": selected_class[0].text(), "catalog": selected_class[1].text(),
                    "section": selected_class[2].text(), "login_time": login_time, "logout_time": logout_time,
-                   "service": self.activityList.currentItem().text()
+                   "service": self.serviceList.currentItem().text()
                    }
 
         if Database.signn_in(student):
@@ -62,11 +62,11 @@ class SignInDialog(QtWidgets.QDialog, Ui_SignInDialog):
         self.semesterList.addItem(Database.get_semester_name())
         self.semesterList.setCurrentRow(0)
 
-        activities = Database.get_all_activities()
-        for activity in activities:
-            self.activityList.addItem(activity["activity"])
-        self.activityList.sortItems(0)
-        self.activityList.setCurrentRow(0)
+        services = Database.get_all_services()
+        for service in services:
+            self.serviceList.addItem(service["service"])
+        self.serviceList.sortItems(0)
+        self.serviceList.setCurrentRow(0)
 
         self.classTable.setRowCount(len(student["enrolled_list"]))
         count = 0
