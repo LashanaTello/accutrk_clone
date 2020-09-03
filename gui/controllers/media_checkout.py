@@ -89,6 +89,7 @@ class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def process_button_clicked(self):
         message = ""
+        error = False
         if self.processButton.text() == "Process":
             result = MediaDatabase.evaluate_media_input(self.mediaIDInput.text())
             if type(result) is tuple and result[0] == "out":
@@ -111,8 +112,7 @@ class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.processButton.setText("Check IN")
             else:
                 message = "Media does not exist"
-                self.popup = MessagePopup()
-                self.popup.show_message(message)
+                error = True
         elif self.processButton.text() == "Check OUT":
             media = {"media_barcode": self.mediaIDInput.text(), "media_title": self.mediaTitleInput.text(),
                      "media_type": self.mediaTypeInput.text()}
@@ -120,18 +120,26 @@ class MediaCheckoutPage(QtWidgets.QMainWindow, Ui_MainWindow):
                             "first_name": self.studentFirstNameInput.text(),
                             "last_name": self.studentLastNameInput.text()}
             result = MediaDatabase.check_out(media, student_info)
-            if result == True:
-                self.clear_all()
-            else:
-                message = "Failed to check out materials under student"
+            self.clear_all()
+            if result == False:
+                message = "Failed to check out materials under student\n"
+                message += ("NAME: " + self.studentFirstNameInput.text() + " " + self.studentLastNameInput.text() + "\n")
+                message += "STUDENT ID: " + self.studentIDInput.text()
+                message += "MEDIA ID: " + self.mediaIDInput.text()
+                error = True
         else:
             result = MediaDatabase.check_in(self.mediaIDInput.text())
-            if result == True:
-                self.clear_all()
-            else:
-                message = "Failed to check in materials"
+            self.clear_all()
+            if result == False:
+                message = "Failed to check in materials\n"
+                message += ("NAME: " + self.studentFirstNameInput.text() + " " + self.studentLastNameInput.text() + "\n")
+                message += "STUDENT ID: " + self.studentIDInput.text()
+                message += "MEDIA ID: " + self.mediaIDInput.text()
+                error = True
 
-        print(message)
+        if error is True:
+            self.popup = MessagePopup()
+            self.popup.show_message(message)
         self.mediaIDInput.setFocus()
 
 
