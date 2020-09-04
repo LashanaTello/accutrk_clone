@@ -8,6 +8,7 @@ from gui.controllers.media_dialog import MediaCheckoutDialog
 from gui.controllers.sign_in_dialog import SignInDialog
 from gui.controllers.message_popup import MessagePopup
 from gui.controllers.register_popup import RegisterPopup
+from gui.controllers.admin_page import AdminPage
 
 from server import Database
 
@@ -36,6 +37,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.signin_dialog = None
         self.popup = None
         self.register_popup = None
+        self.admin_page = None
 
         self.init_ui()
 
@@ -66,6 +68,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.evalUserInputLine.text().isalpha():
             self.evalUserInputLine.setReadOnly(True)
             self.userInput.show()
+            self.userInput.setFocus()
         elif self.evalUserInputLine.text().isdigit():
             result = self.evaluate_input(self.evalUserInputLine.text())
 
@@ -97,7 +100,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return Database.evaluate_input(student_id)
 
     def handle_password_submit(self):
-        print("called")
+        self.admin_page = AdminPage()
+        self.admin_page.show()
+        self.userInput.hide()
+        self.evalUserInputLine.clear()
+        self.evalUserInputLine.setReadOnly(False)
+        self.evalUserInputLine.setFocus()
 
 
 app = QtWidgets.QApplication(sys.argv)

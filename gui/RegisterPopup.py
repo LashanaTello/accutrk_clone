@@ -14,6 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Register(object):
     def setupUi(self, Register):
         Register.setObjectName("Register")
+        Register.setWindowModality(QtCore.Qt.WindowModal)
         Register.resize(743, 697)
         self.buttonBox = QtWidgets.QDialogButtonBox(Register)
         self.buttonBox.setGeometry(QtCore.QRect(260, 640, 230, 41))
