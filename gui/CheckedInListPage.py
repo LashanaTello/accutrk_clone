@@ -11,14 +11,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1127, 878)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.loginList = QtWidgets.QTableWidget(self.centralwidget)
-        self.loginList.setGeometry(QtCore.QRect(0, 70, 1121, 621))
+class Ui_CheckedInList(object):
+    def setupUi(self, CheckedInList):
+        CheckedInList.setObjectName("CheckedInList")
+        CheckedInList.resize(1144, 852)
+        self.loginList = QtWidgets.QTableWidget(CheckedInList)
+        self.loginList.setGeometry(QtCore.QRect(10, 90, 1121, 621))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(99)
         sizePolicy.setVerticalStretch(99)
@@ -46,11 +44,12 @@ class Ui_MainWindow(object):
         self.loginList.horizontalHeader().setCascadingSectionResizes(False)
         self.loginList.horizontalHeader().setDefaultSectionSize(186)
         self.loginList.horizontalHeader().setSortIndicatorShown(False)
-        self.closeWindowButton = QtWidgets.QPushButton(self.centralwidget)
-        self.closeWindowButton.setGeometry(QtCore.QRect(1020, 10, 99, 27))
+        self.closeWindowButton = QtWidgets.QPushButton(CheckedInList)
+        self.closeWindowButton.setGeometry(QtCore.QRect(1030, 30, 99, 40))
+        self.closeWindowButton.setMinimumSize(QtCore.QSize(99, 40))
         self.closeWindowButton.setObjectName("closeWindowButton")
-        self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(450, 730, 211, 61))
+        self.horizontalLayoutWidget = QtWidgets.QWidget(CheckedInList)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(460, 750, 211, 61))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -63,26 +62,25 @@ class Ui_MainWindow(object):
         self.numberOfStudents.setAlignment(QtCore.Qt.AlignCenter)
         self.numberOfStudents.setObjectName("numberOfStudents")
         self.horizontalLayout.addWidget(self.numberOfStudents)
-        MainWindow.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(CheckedInList)
+        QtCore.QMetaObject.connectSlotsByName(CheckedInList)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, CheckedInList):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Who\'s Logged In"))
+        CheckedInList.setWindowTitle(_translate("CheckedInList", "Who\'s Logged In"))
         item = self.loginList.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Last Name"))
+        item.setText(_translate("CheckedInList", "Last Name"))
         item = self.loginList.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "First Name"))
+        item.setText(_translate("CheckedInList", "First Name"))
         item = self.loginList.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Log-In Time"))
+        item.setText(_translate("CheckedInList", "Log-In Time"))
         item = self.loginList.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "Log-Out Time"))
+        item.setText(_translate("CheckedInList", "Log-Out Time"))
         item = self.loginList.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "Class"))
+        item.setText(_translate("CheckedInList", "Class"))
         item = self.loginList.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "Activity"))
-        self.closeWindowButton.setText(_translate("MainWindow", "Close"))
-        self.studentsPresent.setText(_translate("MainWindow", "Students Present:"))
-        self.numberOfStudents.setText(_translate("MainWindow", "0"))
+        item.setText(_translate("CheckedInList", "Activity"))
+        self.closeWindowButton.setText(_translate("CheckedInList", "Close"))
+        self.studentsPresent.setText(_translate("CheckedInList", "Students Present:"))
+        self.numberOfStudents.setText(_translate("CheckedInList", "0"))

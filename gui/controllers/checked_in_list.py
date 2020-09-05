@@ -1,12 +1,12 @@
 import sys
 from PyQt5 import QtWidgets
 
-from gui.CheckedInListPage import Ui_MainWindow
+from gui.CheckedInListPage import Ui_CheckedInList
 from server import Database
 from gui.helperfunctions.helpers import convert_time, combine_into_class
 
 
-class CheckedInListPage(QtWidgets.QMainWindow, Ui_MainWindow):
+class CheckedInListPage(QtWidgets.QDialog, Ui_CheckedInList):
     def __init__(self, *args, obj=None, **kwargs):
         super(CheckedInListPage, self).__init__(*args, **kwargs)
         self.setupUi(self)
