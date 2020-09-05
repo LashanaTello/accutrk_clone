@@ -18,6 +18,7 @@ class Ui_StudentsPage(object):
         StudentsPage.setModal(True)
         self.studentsTable = QtWidgets.QTableWidget(StudentsPage)
         self.studentsTable.setGeometry(QtCore.QRect(20, 160, 1171, 711))
+        self.studentsTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.studentsTable.setObjectName("studentsTable")
         self.studentsTable.setColumnCount(6)
         self.studentsTable.setRowCount(0)

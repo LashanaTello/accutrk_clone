@@ -19,6 +19,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
     def init_ui(self):
         self.closeButton.clicked.connect(self.close_button_clicked)
         self.searchByComboBox.setPlaceholderText("Search by...")
+        self.searchbar.setPlaceholderText("Search by Empl ID...")
 
         model = QtGui.QStandardItemModel()
         model.setHorizontalHeaderItem(0, QtGui.QStandardItem("Empl ID"))
@@ -26,7 +27,6 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         model.setHorizontalHeaderItem(2, QtGui.QStandardItem("First Name"))
         model.setHorizontalHeaderItem(3, QtGui.QStandardItem("Barcode"))
         model.setHorizontalHeaderItem(4, QtGui.QStandardItem("Email"))
-
 
         students = Database.get_all_students()
         count = 0
@@ -54,8 +54,14 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.numStudentsLabel.setText(str(self.studentsTable.rowCount()))
         self.searchByComboBox.setFocus()
 
+        self.searchByComboBox.currentIndexChanged.connect(self.update_searchbar)
+
     def close_button_clicked(self):
         self.close()
+
+    def update_searchbar(self, index):
+        self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() + "...")
+        self.searchbar.completer().setCompletionColumn(index)
 
 
 if __name__ == '__main__':
