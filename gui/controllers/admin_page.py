@@ -5,7 +5,7 @@ from gui.AdminPage import Ui_AdminPage
 from gui.controllers.students_page import StudentsPage
 
 
-class AdminPage(QtWidgets.QMainWindow, Ui_AdminPage):
+class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
     def __init__(self, *args, obj=None, **kwargs):
         super(AdminPage, self).__init__(*args, **kwargs)
         self.setupUi(self)
