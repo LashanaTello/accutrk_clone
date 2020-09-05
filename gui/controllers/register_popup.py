@@ -49,6 +49,7 @@ class RegisterPopup(QtWidgets.QDialog, Ui_Register):
         self.classListComboBox.addItems(formatted_class_list)
 
         completer = QtWidgets.QCompleter(formatted_class_list)
+        completer.setFilterMode(QtCore.Qt.MatchContains)
         self.classListComboBox.setCompleter(completer)
 
         self.classListComboBox.setCurrentIndex(-1)
