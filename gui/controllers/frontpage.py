@@ -102,10 +102,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def handle_password_submit(self):
         self.admin_page = AdminPage()
         self.admin_page.show()
+        self.hide()
+        self.admin_page.finished.connect(self.reopen)
         self.userInput.hide()
         self.evalUserInputLine.clear()
         self.evalUserInputLine.setReadOnly(False)
         self.evalUserInputLine.setFocus()
+
+    def reopen(self):
+        self.show()
 
 
 app = QtWidgets.QApplication(sys.argv)
