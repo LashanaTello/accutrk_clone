@@ -169,7 +169,8 @@ class Database(object):
     # returns list of all students
     @staticmethod
     def get_all_students():
-        return Database.DATABASE[STUDENTS].find({}, {"_id": 0})
+        return Database.DATABASE[STUDENTS].find({}, {"_id": 0}).sort([("last_name", ASCENDING),
+                                                                      ("first_name", ASCENDING)])
 
     # changes last name of student whose eid is an_eid
     # returns true if student"s last name is changed to new_last_name, returns false otherwise
