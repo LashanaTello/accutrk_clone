@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore
 
 from gui.AdminPage import Ui_AdminPage
+from gui.controllers.students_page import StudentsPage
 
 
 class AdminPage(QtWidgets.QMainWindow, Ui_AdminPage):
@@ -10,6 +11,7 @@ class AdminPage(QtWidgets.QMainWindow, Ui_AdminPage):
         self.setupUi(self)
 
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
+        self.students_page = None
 
         self.init_ui()
 
@@ -26,6 +28,8 @@ class AdminPage(QtWidgets.QMainWindow, Ui_AdminPage):
         self.databaseButton.clicked.connect(self.database_button_clicked)
         self.systemButton.clicked.connect(self.system_button_clicked)
         self.userServicesButton.clicked.connect(self.user_services_button_clicked)
+
+        self.studentsButton.clicked.connect(self.students_button_clicked)
 
     def return_button_clicked(self):
         self.close()
@@ -73,6 +77,15 @@ class AdminPage(QtWidgets.QMainWindow, Ui_AdminPage):
     def user_services_button_clicked(self):
         self.stackedWidget.setCurrentIndex(10)
         self.stackContainer.setTitle(self.userServicesButton.text())
+
+    def students_button_clicked(self):
+        self.students_page = StudentsPage()
+        self.students_page.open()
+        self.hide()
+        self.students_page.finished.connect(self.reopen)
+
+    def reopen(self):
+        self.show()
 
 
 if __name__ == '__main__':
