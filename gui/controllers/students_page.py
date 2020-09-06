@@ -10,7 +10,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         super(StudentsPage, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        rx = QtCore.QRegExp("[^`~!#$%\^&*()+={}\[\]:;\"'<>?/,|\\\\]{30}")
+        rx = QtCore.QRegExp("[^`~!#$%\^&*()+={}\[\]:;\"'<>?/,|\\\\]{,30}")
         validator = QtGui.QRegExpValidator(rx)
         self.searchbar.setValidator(validator)
 
@@ -49,12 +49,16 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         completer.setFilterMode(QtCore.Qt.MatchContains)
         completer.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
         completer.setModel(model)
+        completer.setPopup(QtWidgets.QTableView())
+        completer.popup().setMinimumHeight(250)
         self.searchbar.setCompleter(completer)
 
         self.numStudentsLabel.setText(str(self.studentsTable.rowCount()))
-        self.searchByComboBox.setFocus()
+        self.searchbar.setFocus()
 
         self.searchByComboBox.currentIndexChanged.connect(self.update_searchbar)
+        self.searchbar.returnPressed.connect(self.handle_search)
+        self.searchbar.completer().activated[QtCore.QModelIndex].connect(self.handle_activated)
 
     def close_button_clicked(self):
         self.close()
@@ -62,6 +66,19 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
     def update_searchbar(self, index):
         self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() + "...")
         self.searchbar.completer().setCompletionColumn(index)
+
+    def handle_activated(self, index):
+        match = self.studentsTable.findItems(index.sibling(index.row(), 0).data(), QtCore.Qt.MatchExactly)
+        self.studentsTable.selectRow(match[0].row())
+        self.studentsTable.scrollToItem(self.studentsTable.item(match[0].row(), 0))
+
+    def handle_search(self):
+        match = self.studentsTable.findItems(self.searchbar.text(), QtCore.Qt.MatchExactly)
+        if len(match) == 0:
+            return
+        else:
+            self.studentsTable.selectRow(match[0].row())
+            self.studentsTable.scrollToItem(self.studentsTable.item(match[0].row(), 0))
 
 
 if __name__ == '__main__':

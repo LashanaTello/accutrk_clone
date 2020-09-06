@@ -45,7 +45,6 @@ class Ui_StudentsPage(object):
         self.gridLayout.setObjectName("gridLayout")
         self.searchByComboBox = QtWidgets.QComboBox(self.gridLayoutWidget)
         self.searchByComboBox.setMinimumSize(QtCore.QSize(150, 35))
-        self.searchByComboBox.setCurrentText("")
         self.searchByComboBox.setMaxVisibleItems(5)
         self.searchByComboBox.setMaxCount(5)
         self.searchByComboBox.setObjectName("searchByComboBox")
@@ -108,7 +107,7 @@ class Ui_StudentsPage(object):
         self.horizontalLayout.addWidget(self.numStudentsLabel)
 
         self.retranslateUi(StudentsPage)
-        self.searchByComboBox.setCurrentIndex(-1)
+        self.searchByComboBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(StudentsPage)
 
     def retranslateUi(self, StudentsPage):
@@ -126,6 +125,7 @@ class Ui_StudentsPage(object):
         item.setText(_translate("StudentsPage", "Email"))
         item = self.studentsTable.horizontalHeaderItem(5)
         item.setText(_translate("StudentsPage", "Actions"))
+        self.searchByComboBox.setCurrentText(_translate("StudentsPage", "Empl ID"))
         self.searchByComboBox.setItemText(0, _translate("StudentsPage", "Empl ID"))
         self.searchByComboBox.setItemText(1, _translate("StudentsPage", "Last Name"))
         self.searchByComboBox.setItemText(2, _translate("StudentsPage", "First Name"))
