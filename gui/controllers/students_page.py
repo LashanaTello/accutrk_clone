@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.StudentsPage import Ui_StudentsPage
+from gui.controllers.edit_dialog import EditDialog
 from server import Database
 
 
@@ -13,6 +14,8 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         rx = QtCore.QRegExp("[^`~!#$%\^&*()+={}\[\]:;\"'<>?/,|\\\\]{,30}")
         validator = QtGui.QRegExpValidator(rx)
         self.searchbar.setValidator(validator)
+
+        self.edit_dialog = None
 
         self.init_ui()
 
@@ -59,6 +62,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.searchByComboBox.currentIndexChanged.connect(self.update_searchbar)
         self.searchbar.returnPressed.connect(self.handle_search)
         self.searchbar.completer().activated[QtCore.QModelIndex].connect(self.handle_activated)
+        self.editButton.clicked.connect(self.edit_button_clicked)
 
     def close_button_clicked(self):
         self.close()
@@ -79,6 +83,14 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         else:
             self.studentsTable.selectRow(match[0].row())
             self.studentsTable.scrollToItem(self.studentsTable.item(match[0].row(), 0))
+
+    def edit_button_clicked(self):
+        self.edit_dialog = EditDialog()
+        row = self.studentsTable.currentRow()
+        self.edit_dialog.fill_in(self.studentsTable.item(row, 0).text(), self.studentsTable.item(row, 1).text(),
+                                 self.studentsTable.item(row, 2).text(), self.studentsTable.item(row, 3).text(),
+                                 self.studentsTable.item(row, 4).text(), self.studentsTable.currentColumn())
+        self.edit_dialog.open()
 
 
 if __name__ == '__main__':
