@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_EditDialog(object):
     def setupUi(self, EditDialog):
         EditDialog.setObjectName("EditDialog")
-        EditDialog.setWindowModality(QtCore.Qt.ApplicationModal)
+        EditDialog.setWindowModality(QtCore.Qt.WindowModal)
         EditDialog.resize(733, 506)
         EditDialog.setModal(True)
         self.gridLayoutWidget = QtWidgets.QWidget(EditDialog)

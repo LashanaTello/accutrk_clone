@@ -172,47 +172,16 @@ class Database(object):
         return Database.DATABASE[STUDENTS].find({}, {"_id": 0}).sort([("last_name", ASCENDING),
                                                                       ("first_name", ASCENDING)])
 
-    # changes last name of student whose eid is an_eid
-    # returns true if student"s last name is changed to new_last_name, returns false otherwise
+    # changes data of a_student to updated_student in database
+    # returns true if change was successful, returns false otherwise
     @staticmethod
-    def update_student_last_name(an_eid, new_last_name):
-        result = Database.DATABASE[STUDENTS].update_one({"eid": an_eid}, {"$set": {"last_name": new_last_name}})
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # changes first name of student whose eid is an_eid
-    # returns true if student"s first name is changed to new_first_name, returns false otherwise
-    @staticmethod
-    def update_student_first_name(an_eid, new_first_name):
-        result = Database.DATABASE[STUDENTS].update_one({"eid": an_eid}, {"$set": {"first_name": new_first_name}})
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # changes email of student whose eid is an_eid
-    # returns true if student"s email is changed to new_email, returns false otherwise
-    @staticmethod
-    def update_student_email(an_eid, new_email):
-        result = Database.DATABASE[STUDENTS].update_one({"eid": an_eid}, {"$set": {"email": new_email}})
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # changes barcode of student whose eid is an_eid
-    # returns true if student"s barcode is changed to new_barcode, returns false otherwise
-    @staticmethod
-    def update_student_barcode(an_eid, new_barcode):
-        result = Database.DATABASE[STUDENTS].update_one({"eid": an_eid}, {"$set": {"barcode": new_barcode}})
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # changes eid of student whose eid is an_eid
-    # returns true if student"s eid is changed to new_eid, returns false otherwise
-    @staticmethod
-    def update_student_eid(an_eid, new_eid):
-        result = Database.DATABASE[STUDENTS].update_one({"eid": an_eid}, {"$set": {"eid": new_eid}})
+    def update_student(eid, updated_student):
+        result = Database.DATABASE[STUDENTS].update_one({"eid": eid},
+                                                        {"$set": {"eid": updated_student["eid"],
+                                                                  "first_name": updated_student["first_name"],
+                                                                  "last_name": updated_student["last_name"],
+                                                                  "barcode": updated_student["barcode"],
+                                                                  "email": updated_student["email"]}})
         if result.modified_count > 0:
             return True
         return False

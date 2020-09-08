@@ -1,21 +1,42 @@
 import sys
-from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog, QApplication
+from PyQt5.QtCore import QRegExp
+from PyQt5.QtGui import QRegExpValidator
 
 from gui.EditDialog import Ui_EditDialog
+from server import Database
 
 
-class EditDialog(QtWidgets.QDialog, Ui_EditDialog):
+class EditDialog(QDialog, Ui_EditDialog):
     def __init__(self, *args, obj=None, **kwargs):
         super(EditDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
+
+        rx = QRegExp("[0-9]{8}")
+        validator = QRegExpValidator(rx)
+        self.newEIDInput.setValidator(validator)
+
+        rx = QRegExp("[0-9]{14}")
+        validator = QRegExpValidator(rx)
+        self.newBarcodeInput.setValidator(validator)
+
+        rx = QRegExp("[-a-zA-Z ]{25}")
+        validator = QRegExpValidator(rx)
+        self.newLastNameInput.setValidator(validator)
+        self.newFirstNameInput.setValidator(validator)
+
+        rx = QRegExp("^[a-z0-9+_.-]+@[a-z0-9.-]+$")
+        validator = QRegExpValidator(rx)
+        self.newEmailInput.setValidator(validator)
 
         self.init_ui()
 
     def init_ui(self):
         self.cancelButton.clicked.connect(self.cancel_button_clicked)
+        self.okButton.clicked.connect(self.ok_button_clicked)
 
     def cancel_button_clicked(self):
-        self.close()
+        self.reject()
 
     def fill_in(self, eid, last, first, barcode, email, col):
         self.ogEIDInput.setText(eid)
@@ -40,9 +61,19 @@ class EditDialog(QtWidgets.QDialog, Ui_EditDialog):
         else:
             self.newEmailInput.setFocus()
 
+    def ok_button_clicked(self):
+        student = {"eid": self.newEIDInput.text(), "barcode": self.newBarcodeInput.text(),
+                   "last_name": self.newLastNameInput.text(), "first_name": self.newFirstNameInput.text(),
+                   "email": self.newEmailInput.text()}
+        result = Database.update_student(self.ogEIDInput.text(), student)
+        if result is True:
+            self.accept()
+        else:
+            print("couldn't update student")
+
 
 if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
 
     window = EditDialog()
     window.show()

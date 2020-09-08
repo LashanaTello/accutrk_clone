@@ -24,6 +24,54 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.searchByComboBox.setPlaceholderText("Search by...")
         self.searchbar.setPlaceholderText("Search by Empl ID...")
 
+        self.fill_table()
+
+        self.numStudentsLabel.setText(str(self.studentsTable.rowCount()))
+        self.searchbar.setFocus()
+
+        self.searchByComboBox.currentIndexChanged.connect(self.update_searchbar)
+        self.searchbar.returnPressed.connect(self.handle_search)
+        self.searchbar.completer().activated[QtCore.QModelIndex].connect(self.handle_activated)
+        self.editButton.clicked.connect(self.edit_button_clicked)
+        self.refreshButton.clicked.connect(self.fill_table)
+
+    def close_button_clicked(self):
+        self.close()
+
+    def update_searchbar(self, index):
+        self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() + "...")
+        self.searchbar.completer().setCompletionColumn(index)
+
+    def handle_activated(self, index):
+        match = self.studentsTable.findItems(index.sibling(index.row(), 0).data(), QtCore.Qt.MatchExactly)
+        self.studentsTable.selectRow(match[0].row())
+        self.studentsTable.scrollToItem(self.studentsTable.item(match[0].row(), 0))
+
+    def handle_search(self):
+        match = self.studentsTable.findItems(self.searchbar.text(), QtCore.Qt.MatchExactly)
+        if len(match) == 0:
+            return
+        else:
+            self.studentsTable.selectRow(match[0].row())
+            self.studentsTable.scrollToItem(self.studentsTable.item(match[0].row(), 0))
+
+    def edit_button_clicked(self):
+        if self.studentsTable.currentRow() < 0:
+            print("select a cell or row")
+        else:
+            self.edit_dialog = EditDialog()
+            row = self.studentsTable.currentRow()
+            self.edit_dialog.fill_in(self.studentsTable.item(row, 0).text(), self.studentsTable.item(row, 1).text(),
+                                     self.studentsTable.item(row, 2).text(), self.studentsTable.item(row, 3).text(),
+                                     self.studentsTable.item(row, 4).text(), self.studentsTable.currentColumn())
+            self.edit_dialog.open()
+            self.edit_dialog.finished.connect(self.evaluate)
+
+    def evaluate(self, result):
+        if result is 1:
+            self.fill_table()
+
+    def fill_table(self):
         model = QtGui.QStandardItemModel()
         model.setHorizontalHeaderItem(0, QtGui.QStandardItem("Empl ID"))
         model.setHorizontalHeaderItem(1, QtGui.QStandardItem("Last Name"))
@@ -55,42 +103,6 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         completer.setPopup(QtWidgets.QTableView())
         completer.popup().setMinimumHeight(250)
         self.searchbar.setCompleter(completer)
-
-        self.numStudentsLabel.setText(str(self.studentsTable.rowCount()))
-        self.searchbar.setFocus()
-
-        self.searchByComboBox.currentIndexChanged.connect(self.update_searchbar)
-        self.searchbar.returnPressed.connect(self.handle_search)
-        self.searchbar.completer().activated[QtCore.QModelIndex].connect(self.handle_activated)
-        self.editButton.clicked.connect(self.edit_button_clicked)
-
-    def close_button_clicked(self):
-        self.close()
-
-    def update_searchbar(self, index):
-        self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() + "...")
-        self.searchbar.completer().setCompletionColumn(index)
-
-    def handle_activated(self, index):
-        match = self.studentsTable.findItems(index.sibling(index.row(), 0).data(), QtCore.Qt.MatchExactly)
-        self.studentsTable.selectRow(match[0].row())
-        self.studentsTable.scrollToItem(self.studentsTable.item(match[0].row(), 0))
-
-    def handle_search(self):
-        match = self.studentsTable.findItems(self.searchbar.text(), QtCore.Qt.MatchExactly)
-        if len(match) == 0:
-            return
-        else:
-            self.studentsTable.selectRow(match[0].row())
-            self.studentsTable.scrollToItem(self.studentsTable.item(match[0].row(), 0))
-
-    def edit_button_clicked(self):
-        self.edit_dialog = EditDialog()
-        row = self.studentsTable.currentRow()
-        self.edit_dialog.fill_in(self.studentsTable.item(row, 0).text(), self.studentsTable.item(row, 1).text(),
-                                 self.studentsTable.item(row, 2).text(), self.studentsTable.item(row, 3).text(),
-                                 self.studentsTable.item(row, 4).text(), self.studentsTable.currentColumn())
-        self.edit_dialog.open()
 
 
 if __name__ == '__main__':
