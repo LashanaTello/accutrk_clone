@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from gui.StudentsPage import Ui_StudentsPage
 from gui.controllers.edit_dialog import EditDialog
 from gui.controllers.add_student_dialog import AddStudentDialog
+from gui.controllers.registered_dialog import RegisteredDialog
 from server import Database
 
 
@@ -18,6 +19,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
 
         self.edit_dialog = None
         self.add_dialog = None
+        self.registered_dialog = None
 
         self.init_ui()
 
@@ -37,6 +39,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.editButton.clicked.connect(self.edit_button_clicked)
         self.refreshButton.clicked.connect(self.fill_table)
         self.addButton.clicked.connect(self.add_button_clicked)
+        self.registerButton.clicked.connect(self.registered_button_clicked)
 
     def close_button_clicked(self):
         self.close()
@@ -78,6 +81,17 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.add_dialog = AddStudentDialog()
         self.add_dialog.open()
         self.add_dialog.finished.connect(self.evaluate)
+
+    def registered_button_clicked(self):
+        self.registered_dialog = RegisteredDialog()
+        row = self.studentsTable.currentRow()
+        if row < 0:
+            print("select a cell or row")
+        else:
+            self.registered_dialog.fill_in(self.studentsTable.item(row, 0).text(),
+                                           self.studentsTable.item(row, 2).text(),
+                                           self.studentsTable.item(row, 1).text())
+            self.registered_dialog.open()
 
     def fill_table(self):
         model = QtGui.QStandardItemModel()

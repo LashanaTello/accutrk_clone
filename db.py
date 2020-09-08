@@ -66,7 +66,7 @@ class Database(object):
     @staticmethod
     def sign_in(eid, barcode, first_name, last_name, subject, catalog, section, service, login_time="", logout_time=""):
         if login_time == "" and logout_time == "":
-            login_time = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+            login_time = datetime.datetime.utcnow()
 
         if logout_time == "":
             result = Database.DATABASE[CURRENT_LOGINS].insert_one({"eid": eid, "barcode": barcode,
@@ -89,7 +89,7 @@ class Database(object):
     @staticmethod
     def signn_in(student):
         if student["login_time"] == "" and student["logout_time"] == "":
-            student["login_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+            student["login_time"] = datetime.datetime.utcnow()
 
         if student["logout_time"] == "":
             result = Database.DATABASE[CURRENT_LOGINS].insert_one({"eid": student["eid"], "barcode": student["barcode"],
@@ -127,7 +127,7 @@ class Database(object):
             student_login = Database.DATABASE[CURRENT_LOGINS].find_one_and_delete({"barcode": student_number})
 
         if logout_time == "":
-            student_login["logout_time"] = datetime.datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+            student_login["logout_time"] = datetime.datetime.utcnow()
         else:
             student_login["logout_time"] = logout_time
         result = Database.DATABASE[LOGIN_HISTORY].insert_one(student_login)
@@ -171,6 +171,16 @@ class Database(object):
     def get_all_students():
         return Database.DATABASE[STUDENTS].find({}, {"_id": 0}).sort([("last_name", ASCENDING),
                                                                       ("first_name", ASCENDING)])
+
+    # returns list of classes that student with eid or barcode "student_id" is enrolled in
+    @staticmethod
+    def get_student_classes(student_id):
+        if len(student_id) == 8:
+            student_info = Database.DATABASE[STUDENTS].find_one({"eid": student_id}, {"_id": 0, "enrolled_list": 1})
+        else:
+            student_info = Database.DATABASE[STUDENTS].find_one({"barcode": student_id}, {"_id": 0, "enrolled_list": 1})
+
+        return student_info
 
     # changes data of a_student to updated_student in database
     # returns true if change was successful, returns false otherwise
@@ -387,8 +397,7 @@ class Database(object):
                                                                            "section": section,
                                                                            "registered_by": "meeeee",
                                                                            "registered_date":
-                                                                               datetime.datetime.now().strftime(
-                                                                                   "%m/%d/%Y %I:%M:%S %p")}}})
+                                                                               datetime.datetime.utcnow()}}})
 
         if result.modified_count > 0 and student_result.modified_count > 0:
             return True, True
