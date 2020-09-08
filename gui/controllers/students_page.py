@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.StudentsPage import Ui_StudentsPage
 from gui.controllers.edit_dialog import EditDialog
+from gui.controllers.add_student_dialog import AddStudentDialog
 from server import Database
 
 
@@ -16,6 +17,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.searchbar.setValidator(validator)
 
         self.edit_dialog = None
+        self.add_dialog = None
 
         self.init_ui()
 
@@ -34,6 +36,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.searchbar.completer().activated[QtCore.QModelIndex].connect(self.handle_activated)
         self.editButton.clicked.connect(self.edit_button_clicked)
         self.refreshButton.clicked.connect(self.fill_table)
+        self.addButton.clicked.connect(self.add_button_clicked)
 
     def close_button_clicked(self):
         self.close()
@@ -70,6 +73,11 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
     def evaluate(self, result):
         if result is 1:
             self.fill_table()
+
+    def add_button_clicked(self):
+        self.add_dialog = AddStudentDialog()
+        self.add_dialog.open()
+        self.add_dialog.finished.connect(self.evaluate)
 
     def fill_table(self):
         model = QtGui.QStandardItemModel()
