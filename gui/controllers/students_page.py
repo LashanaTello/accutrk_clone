@@ -5,6 +5,7 @@ from gui.StudentsPage import Ui_StudentsPage
 from gui.controllers.edit_dialog import EditDialog
 from gui.controllers.add_student_dialog import AddStudentDialog
 from gui.controllers.registered_dialog import RegisteredDialog
+from gui.controllers.delete_student_dialog import DeleteStudentDialog
 from server import Database
 
 
@@ -20,6 +21,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.edit_dialog = None
         self.add_dialog = None
         self.registered_dialog = None
+        self.delete_dialog = None
 
         self.init_ui()
 
@@ -40,6 +42,7 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.refreshButton.clicked.connect(self.fill_table)
         self.addButton.clicked.connect(self.add_button_clicked)
         self.registerButton.clicked.connect(self.registered_button_clicked)
+        self.deleteButton.clicked.connect(self.delete_button_clicked)
 
     def close_button_clicked(self):
         self.close()
@@ -92,6 +95,17 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
                                            self.studentsTable.item(row, 2).text(),
                                            self.studentsTable.item(row, 1).text())
             self.registered_dialog.open()
+
+    def delete_button_clicked(self):
+        self.delete_dialog = DeleteStudentDialog()
+        row = self.studentsTable.currentRow()
+        if row < 0:
+            print("select a cell or row")
+        else:
+            self.delete_dialog.fill_in(self.studentsTable.item(row, 2).text(), self.studentsTable.item(row, 1).text(),
+                                       self.studentsTable.item(row, 0).text())
+            self.delete_dialog.open()
+            self.delete_dialog.finished.connect(self.evaluate)
 
     def fill_table(self):
         model = QtGui.QStandardItemModel()
