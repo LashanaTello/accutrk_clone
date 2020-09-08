@@ -86,22 +86,22 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.add_dialog.finished.connect(self.evaluate)
 
     def registered_button_clicked(self):
-        self.registered_dialog = RegisteredDialog()
         row = self.studentsTable.currentRow()
         if row < 0:
             print("select a cell or row")
         else:
+            self.registered_dialog = RegisteredDialog()
             self.registered_dialog.fill_in(self.studentsTable.item(row, 0).text(),
                                            self.studentsTable.item(row, 2).text(),
                                            self.studentsTable.item(row, 1).text())
             self.registered_dialog.open()
 
     def delete_button_clicked(self):
-        self.delete_dialog = DeleteStudentDialog()
         row = self.studentsTable.currentRow()
         if row < 0:
             print("select a cell or row")
         else:
+            self.delete_dialog = DeleteStudentDialog()
             self.delete_dialog.fill_in(self.studentsTable.item(row, 2).text(), self.studentsTable.item(row, 1).text(),
                                        self.studentsTable.item(row, 0).text())
             self.delete_dialog.open()
