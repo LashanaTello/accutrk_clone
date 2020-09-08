@@ -1,32 +1,30 @@
 import sys
-from PyQt5.QtWidgets import QDialog, QApplication
-from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QRegExpValidator
+from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.EditDialog import Ui_EditDialog
 from server import Database
 
 
-class EditDialog(QDialog, Ui_EditDialog):
+class EditDialog(QtWidgets.QDialog, Ui_EditDialog):
     def __init__(self, *args, obj=None, **kwargs):
         super(EditDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
-        rx = QRegExp("[0-9]{8}")
-        validator = QRegExpValidator(rx)
+        rx = QtCore.QRegExp("[0-9]{8}")
+        validator = QtGui.QRegExpValidator(rx)
         self.newEIDInput.setValidator(validator)
 
-        rx = QRegExp("[0-9]{14}")
-        validator = QRegExpValidator(rx)
+        rx = QtCore.QRegExp("[0-9]{14}")
+        validator = QtGui.QRegExpValidator(rx)
         self.newBarcodeInput.setValidator(validator)
 
-        rx = QRegExp("[-a-zA-Z ]{25}")
-        validator = QRegExpValidator(rx)
+        rx = QtCore.QRegExp("[-a-zA-Z ]{25}")
+        validator = QtGui.QRegExpValidator(rx)
         self.newLastNameInput.setValidator(validator)
         self.newFirstNameInput.setValidator(validator)
 
-        rx = QRegExp("^[a-z0-9+_.-]+@[a-z0-9.-]+$")
-        validator = QRegExpValidator(rx)
+        rx = QtCore.QRegExp("^[a-z0-9+_.-]+@[a-z0-9.-]+$")
+        validator = QtGui.QRegExpValidator(rx)
         self.newEmailInput.setValidator(validator)
 
         self.init_ui()
@@ -73,7 +71,7 @@ class EditDialog(QDialog, Ui_EditDialog):
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     window = EditDialog()
     window.show()
