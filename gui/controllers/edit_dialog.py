@@ -59,15 +59,52 @@ class EditDialog(QtWidgets.QDialog, Ui_EditDialog):
         else:
             self.newEmailInput.setFocus()
 
-    def ok_button_clicked(self):
-        student = {"eid": self.newEIDInput.text(), "barcode": self.newBarcodeInput.text(),
-                   "last_name": self.newLastNameInput.text(), "first_name": self.newFirstNameInput.text(),
-                   "email": self.newEmailInput.text()}
-        result = Database.update_student(self.ogEIDInput.text(), student)
-        if result is True:
-            self.accept()
+    def fill_in_professor(self, last, first, email, col):
+        self.ogEIDInput.hide()
+        self.ogEIDLabel.hide()
+        self.newEIDInput.hide()
+        self.newEIDLabel.hide()
+        self.ogBarcodeInput.hide()
+        self.ogBarcodeLabel.hide()
+        self.newBarcodeInput.hide()
+        self.newBarcodeLabel.hide()
+
+        self.setWindowTitle("Edit Professor")
+
+        self.ogLastNameInput.setText(last)
+        self.newLastNameInput.setText(last)
+        self.ogFirstNameInput.setText(first)
+        self.newFirstNameInput.setText(first)
+        self.ogEmailInput.setText(email)
+        self.newEmailInput.setText(email)
+
+        if col == 0:
+            self.newLastNameInput.setFocus()
+        elif col == 1:
+            self.newFirstNameInput.setFocus()
         else:
-            print("couldn't update student")
+            self.newEmailInput.setFocus()
+
+    def ok_button_clicked(self):
+        if self.windowTitle() == "Edit Student":
+            student = {"eid": self.newEIDInput.text(), "barcode": self.newBarcodeInput.text(),
+                       "last_name": self.newLastNameInput.text(), "first_name": self.newFirstNameInput.text(),
+                       "email": self.newEmailInput.text()}
+            result = Database.update_student(self.ogEIDInput.text(), student)
+            if result is True:
+                self.accept()
+            else:
+                print("couldn't update student")
+        else:
+            og_prof = {"last_name": self.ogLastNameInput.text(), "first_name": self.ogFirstNameInput.text(),
+                       "email": self.ogEmailInput.text()}
+            professor = {"last_name": self.newLastNameInput.text(), "first_name": self.newFirstNameInput.text(),
+                         "email": self.newEmailInput.text()}
+            result = Database.update_professor(og_prof, professor)
+            if result is True:
+                self.accept()
+            else:
+                print("couldn't update professor")
 
 
 if __name__ == '__main__':

@@ -37,12 +37,27 @@ class AddStudentDialog(QtWidgets.QDialog, Ui_AddStudentDialog):
         self.reject()
 
     def add_button_clicked(self):
-        result = Database.add_student(self.EIDInput.text(), self.firstNameInput.text(), self.lastNameInput.text(),
-                                      self.barcodeInput.text(), self.emailInput.text())
-        if result is True:
-            self.accept()
+        if self.windowTitle() == "Add Student":
+            result = Database.add_student(self.EIDInput.text(), self.firstNameInput.text(), self.lastNameInput.text(),
+                                          self.barcodeInput.text(), self.emailInput.text())
+            if result is True:
+                self.accept()
+            else:
+                print("could not add student")
         else:
-            print("could not add student")
+            result = Database.add_professor(self.firstNameInput.text(), self.lastNameInput.text(),
+                                            self.emailInput.text())
+            if result is True:
+                self.accept()
+            else:
+                print("could not add professor")
+
+    def adjust_display(self):
+        self.EIDInput.hide()
+        self.EIDLabel.hide()
+        self.barcodeInput.hide()
+        self.barcodeLabel.hide()
+        self.setWindowTitle("Add Professor")
 
     # def validate_input(self):
     #     valid = []

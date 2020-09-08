@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtCore
 
 from gui.AdminPage import Ui_AdminPage
 from gui.controllers.students_page import StudentsPage
+from gui.controllers.professors_page import ProfessorsPage
 
 
 class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
@@ -12,6 +13,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
 
         self.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         self.students_page = None
+        self.professors_page = None
 
         self.init_ui()
 
@@ -30,6 +32,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.userServicesButton.clicked.connect(self.user_services_button_clicked)
 
         self.studentsButton.clicked.connect(self.students_button_clicked)
+        self.professorButton.clicked.connect(self.professors_button_clicked)
 
     def return_button_clicked(self):
         self.close()
@@ -83,6 +86,12 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.students_page.open()
         self.hide()
         self.students_page.finished.connect(self.reopen)
+
+    def professors_button_clicked(self):
+        self.professors_page = ProfessorsPage()
+        self.professors_page.open()
+        self.hide()
+        self.professors_page.finished.connect(self.reopen)
 
     def reopen(self):
         self.show()

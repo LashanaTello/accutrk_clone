@@ -11,6 +11,9 @@ class DeleteStudentDialog(QtWidgets.QDialog, Ui_DeleteStudentDialog):
         self.setupUi(self)
 
         self.eid = ""
+        self.first = ""
+        self.last = ""
+        self.email = ""
 
         self.init_ui()
 
@@ -22,15 +25,31 @@ class DeleteStudentDialog(QtWidgets.QDialog, Ui_DeleteStudentDialog):
         self.reject()
 
     def delete_button_clicked(self):
-        result = Database.remove_student(self.eid)
-        if result is True:
-            self.accept()
+        if self.windowTitle() == "Delete Student":
+            result = Database.remove_student(self.eid)
+            if result is True:
+                self.accept()
+            else:
+                print("could not delete student")
         else:
-            print("could not delete student")
+            result = Database.remove_professor(self.first, self.last, self.email)
+            if result is True:
+                self.accept()
+            else:
+                print("could not delete professor")
 
     def fill_in(self, first, last, eid):
-        self.studentNameLabel.setText(first + " " + last)
+        self.nameLabel.setText(first + " " + last)
         self.eid = eid
+
+    def fill_in_prof(self, first, last, email):
+        self.nameLabel.setText(first + " " + last)
+        self.first = first
+        self.last = last
+        self.email = email
+        self.setWindowTitle("Delete Professor?")
+        self.message.setText("Are you sure you want to delete this professor?")
+        self.deleteButton.setText("Delete Professor")
 
 
 if __name__ == '__main__':

@@ -311,35 +311,16 @@ class Database(object):
     def get_all_professors():
         return Database.DATABASE[PROFESSORS].find({}, {"_id": 0})
 
-    # returns true if professor's first_name was changed to new_first_name, returns false otherwise
+    # changes data of og_professor to updated_professor in database
+    # returns true if change was successful, returns false otherwise
     @staticmethod
-    def update_professor_first_name(new_first_name, first_name, last_name, email=""):
-        result = Database.DATABASE[PROFESSORS].update_one({"first_name": first_name, "last_name": last_name,
-                                                           "email": email},
-                                                          {"$set": {"first_name": new_first_name}})
-
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # returns true if professor's last_name was changed to new_last_name, returns false otherwise
-    @staticmethod
-    def update_professor_last_name(new_last_name, first_name, last_name, email=""):
-        result = Database.DATABASE[PROFESSORS].update_one({"first_name": first_name, "last_name": last_name,
-                                                           "email": email},
-                                                          {"$set": {"last_name": new_last_name}})
-
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # returns true if professor's email was changed to new_email, returns false otherwise
-    @staticmethod
-    def update_professor_email(new_email, first_name, last_name, email=""):
-        result = Database.DATABASE[PROFESSORS].update_one({"first_name": first_name, "last_name": last_name,
-                                                           "email": email},
-                                                          {"$set": {"email": new_email}})
-
+    def update_professor(og_professor, updated_professor):
+        result = Database.DATABASE[PROFESSORS].update_one({"first_name": og_professor["first_name"],
+                                                           "last_name": og_professor["last_name"],
+                                                           "email": og_professor["email"]},
+                                                          {"$set": {"first_name": updated_professor["first_name"],
+                                                                    "last_name": updated_professor["last_name"],
+                                                                    "email": updated_professor["email"]}})
         if result.modified_count > 0:
             return True
         return False
