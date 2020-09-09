@@ -38,6 +38,7 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         self.refreshButton.clicked.connect(self.fill_table)
         self.addButton.clicked.connect(self.add_button_clicked)
         self.deleteButton.clicked.connect(self.delete_button_clicked)
+        self.registrationButton.clicked.connect(self.registration_button_clicked)
 
     def close_button_clicked(self):
         self.close()
@@ -61,16 +62,6 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
 
     def edit_button_clicked(self):
         return
-        # if self.coursesTable.currentRow() < 0:
-        #     print("select a cell or row")
-        # else:
-        #     self.edit_dialog = EditDialog()
-        #     row = self.coursesTable.currentRow()
-        #     self.edit_dialog.fill_in(self.coursesTable.item(row, 0).text(), self.coursesTable.item(row, 1).text(),
-        #                              self.coursesTable.item(row, 2).text(), self.coursesTable.item(row, 3).text(),
-        #                              self.coursesTable.item(row, 4).text(), self.coursesTable.currentColumn())
-        #     self.edit_dialog.open()
-        #     self.edit_dialog.finished.connect(self.evaluate)
 
     def evaluate(self, result):
         if result is 1:
@@ -82,6 +73,9 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         self.add_dialog.finished.connect(self.evaluate)
 
     def delete_button_clicked(self):
+        return
+
+    def registration_button_clicked(self):
         return
 
     def fill_table(self):
