@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.CoursesPage import Ui_CoursesPage
 from gui.controllers.edit_dialog import EditDialog
-from gui.controllers.add_student_dialog import AddStudentDialog
+from gui.controllers.add_course_dialog import AddCourseDialog
 from gui.controllers.delete_student_dialog import DeleteStudentDialog
 from server import Database
 
@@ -47,7 +47,7 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         self.searchbar.completer().setCompletionColumn(index)
 
     def handle_activated(self, index):
-        match = self.coursesTable.findItems(index.sibling(index.row(), 0).data(), QtCore.Qt.MatchExactly)
+        match = self.coursesTable.findItems(index.sibling(index.row(), 6).data(), QtCore.Qt.MatchExactly)
         self.coursesTable.selectRow(match[0].row())
         self.coursesTable.scrollToItem(self.coursesTable.item(match[0].row(), 0))
 
@@ -77,7 +77,7 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
             self.fill_table()
 
     def add_button_clicked(self):
-        self.add_dialog = AddStudentDialog()
+        self.add_dialog = AddCourseDialog()
         self.add_dialog.open()
         self.add_dialog.finished.connect(self.evaluate)
 
@@ -92,6 +92,7 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         model.setHorizontalHeaderItem(3, QtGui.QStandardItem("# of Students"))
         model.setHorizontalHeaderItem(4, QtGui.QStandardItem("Professor"))
         model.setHorizontalHeaderItem(5, QtGui.QStandardItem("Professor Email"))
+        model.setHorizontalHeaderItem(6, QtGui.QStandardItem("UniqueIndex"))
 
         courses = Database.get_classes_with_size()
         count = 0
@@ -102,20 +103,30 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
             self.coursesTable.setItem(count, 2, QtWidgets.QTableWidgetItem(course["section"]))
             self.coursesTable.setItem(count, 3, QtWidgets.QTableWidgetItem(str(course["count"])))
             if course["professor"] != {}:
-                self.coursesTable.setItem(count, 4, QtWidgets.QTableWidgetItem(course["professor"]["first_name"] +
+                self.coursesTable.setItem(count, 4, QtWidgets.QTableWidgetItem(course["professor"]["first_name"] + " " +
                                                                                course["professor"]["last_name"]))
                 self.coursesTable.setItem(count, 5, QtWidgets.QTableWidgetItem(course["professor"]["email"]))
+            else:
+                self.coursesTable.setItem(count, 4, QtWidgets.QTableWidgetItem(""))
+                self.coursesTable.setItem(count, 5, QtWidgets.QTableWidgetItem(""))
+            self.coursesTable.setItem(count, 6, QtWidgets.QTableWidgetItem(course["subject"] + course["catalog"] +
+                                                                           course["section"]))
 
             model.setItem(count, 0, QtGui.QStandardItem(course["subject"]))
             model.setItem(count, 1, QtGui.QStandardItem(course["catalog"]))
             model.setItem(count, 2, QtGui.QStandardItem(course["section"]))
             model.setItem(count, 3, QtGui.QStandardItem(str(course["count"])))
             if course["professor"] != {}:
-                model.setItem(count, 4, QtGui.QStandardItem(course["professor"]["first_name"] +
+                model.setItem(count, 4, QtGui.QStandardItem(course["professor"]["first_name"] + " " +
                                                             course["professor"]["last_name"]))
                 model.setItem(count, 5, QtGui.QStandardItem(course["professor"]["email"]))
+            else:
+                model.setItem(count, 4, QtGui.QStandardItem(""))
+                model.setItem(count, 5, QtGui.QStandardItem(""))
+            model.setItem(count, 6, QtGui.QStandardItem(course["subject"] + course["catalog"] + course["section"]))
             count += 1
 
+        self.coursesTable.setColumnHidden(6, True)
         self.numCoursesLabel.setText(str(self.coursesTable.rowCount()))
 
         completer = QtWidgets.QCompleter()
@@ -124,6 +135,7 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         completer.setModel(model)
         popup = QtWidgets.QTableView()
         popup.setModel(model)
+        popup.setColumnHidden(6, True)
         popup.setMinimumWidth(805)
         popup.setMinimumHeight(300)
         popup.setColumnWidth(4, 170)
