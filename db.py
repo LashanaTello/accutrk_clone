@@ -223,6 +223,12 @@ class Database(object):
             return True
         return False
 
+    @staticmethod
+    def get_classes_with_size():
+        command = [{"$project": {"_id": 0, "subject": 1, "catalog": 1, "section": 1, "professor": 1, "class_roster": 1,
+                                 "count": {"$size": "$class_roster"}}}]
+        return Database.DATABASE[CLASSES].aggregate(command)
+
     # returns list of all classes in the system
     @staticmethod
     def get_all_classes():
