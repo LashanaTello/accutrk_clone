@@ -31,8 +31,6 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
         self.searchbar.setPlaceholderText("Search by Empl ID...")
 
         self.fill_table()
-
-        self.numStudentsLabel.setText(str(self.studentsTable.rowCount()))
         self.searchbar.setFocus()
 
         self.searchByComboBox.currentIndexChanged.connect(self.update_searchbar)
@@ -131,6 +129,8 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
             model.setItem(count, 3, QtGui.QStandardItem(student["barcode"]))
             model.setItem(count, 4, QtGui.QStandardItem(student["email"]))
             count += 1
+
+        self.numStudentsLabel.setText(str(self.studentsTable.rowCount()))
 
         completer = QtWidgets.QCompleter()
         completer.setFilterMode(QtCore.Qt.MatchContains)

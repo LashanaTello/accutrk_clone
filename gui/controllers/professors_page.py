@@ -29,8 +29,6 @@ class ProfessorsPage(QtWidgets.QDialog, Ui_ProfessorsPage):
         self.searchbar.setPlaceholderText("Search by Last Name...")
 
         self.fill_table()
-
-        self.numProfessorsLabel.setText(str(self.professorsTable.rowCount()))
         self.searchbar.setFocus()
 
         self.searchByComboBox.currentIndexChanged.connect(self.update_searchbar)
@@ -114,6 +112,8 @@ class ProfessorsPage(QtWidgets.QDialog, Ui_ProfessorsPage):
             model.setItem(count, 1, QtGui.QStandardItem(prof["first_name"]))
             model.setItem(count, 2, QtGui.QStandardItem(prof["email"]))
             count += 1
+
+        self.numProfessorsLabel.setText(str(self.professorsTable.rowCount()))
 
         completer = QtWidgets.QCompleter()
         completer.setFilterMode(QtCore.Qt.MatchContains)
