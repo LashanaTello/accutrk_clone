@@ -241,49 +241,17 @@ class Database(object):
                                                {"_id": 0, "subject": 1, "catalog": 1, "section": 1, "professor": 1}) \
             .sort([("subject", ASCENDING), ("catalog", ASCENDING), ("section", ASCENDING)])
 
-    # changes the subject of the class whose subject, catalog, and section fields match the given parameters
-    # the class's subject field will be set to new_subject
-    # returns true if class's subject is changed to new_subject and returns false otherwise
+    # changes the data of old_class in database to new_class
+    # returns true if old_class is changed and returns false otherwise
     @staticmethod
-    def update_class_subject(new_subject, subject, catalog, section):
-        result = Database.DATABASE[CLASSES].update_one({"subject": subject, "catalog": catalog, "section": section},
-                                                       {"$set": {"subject": new_subject}})
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # changes the catalog of the class whose subject, catalog, and section fields match the given parameters
-    # the class's catalog field will be set to new_catalog
-    # returns true if class's catalog is changed to new_catalog and returns false otherwise
-    @staticmethod
-    def update_class_catalog(new_catalog, subject, catalog, section):
-        result = Database.DATABASE[CLASSES].update_one({"subject": subject, "catalog": catalog, "section": section},
-                                                       {"$set": {"catalog": new_catalog}})
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # changes the section of the class whose subject, catalog, and section fields match the given parameters
-    # the class's section field will be set to new_section
-    # returns true if class's section is changed to new_section and returns false otherwise
-    @staticmethod
-    def update_class_section(new_section, subject, catalog, section):
-        result = Database.DATABASE[CLASSES].update_one({"subject": subject, "catalog": catalog, "section": section},
-                                                       {"$set": {"section": new_section}})
-        if result.modified_count > 0:
-            return True
-        return False
-
-    # changes the professor of the class whose subject, catalog, and section fields match the given parameters
-    # the first_name and last_name field of the class's professor field will be set to prof_first_name and
-    # prof_last_name, respectively
-    # returns true if class's professor is changed and returns false otherwise
-    @staticmethod
-    def update_class_professor(prof_first_name, prof_last_name, email, subject, catalog, section):
-        result = Database.DATABASE[CLASSES].update_one({"subject": subject, "catalog": catalog, "section": section},
-                                                       {"$set": {"professor.first_name": prof_first_name,
-                                                                 "professor.last_name": prof_last_name,
-                                                                 "email": email}})
+    def update_class(old_class, new_class):
+        result = Database.DATABASE[CLASSES].update_one({"subject": old_class["subject"],
+                                                        "catalog": old_class["catalog"],
+                                                        "section": old_class["section"]},
+                                                       {"$set": {"subject": new_class["subject"],
+                                                                 "catalog": new_class["catalog"],
+                                                                 "section": new_class["section"],
+                                                                 "professor": new_class["professor"]}})
         if result.modified_count > 0:
             return True
         return False

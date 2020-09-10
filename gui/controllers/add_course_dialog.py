@@ -59,7 +59,9 @@ class AddCourseDialog(QtWidgets.QDialog, Ui_addCourseDialog):
         self.addButton.clicked.connect(self.add_button_clicked)
         self.professorDropDown.activated.connect(self.dropdown_activated)
         self.professorDropDown.completer().activated[QtCore.QModelIndex].connect(self.completer_activated)
-        self.subjectInput.textEdited.connect(self.edit_text)
+        self.subjectInput.textEdited.connect(self.edit_subject_text)
+        self.catalogInput.textEdited.connect(self.edit_catalog_text)
+        self.sectionInput.textEdited.connect(self.edit_section_text)
 
     def cancel_button_clicked(self):
         self.reject()
@@ -88,8 +90,14 @@ class AddCourseDialog(QtWidgets.QDialog, Ui_addCourseDialog):
     def set_dropdown_text(self):
         self.professorDropDown.setCurrentText(self.prof_first + " " + self.prof_last + ", " + self.prof_email)
 
-    def edit_text(self, text):
+    def edit_subject_text(self, text):
         self.subjectInput.setText(text.upper())
+
+    def edit_catalog_text(self, text):
+        self.catalogInput.setText(text.upper())
+
+    def edit_section_text(self, text):
+        self.sectionInput.setText(text.upper())
 
     # def validate_input(self):
     #     valid = []

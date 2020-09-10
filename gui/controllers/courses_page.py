@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.CoursesPage import Ui_CoursesPage
-from gui.controllers.edit_dialog import EditDialog
+from gui.controllers.edit_course_dialog import EditCourseDialog
 from gui.controllers.add_course_dialog import AddCourseDialog
 from gui.controllers.delete_student_dialog import DeleteStudentDialog
 from server import Database
@@ -61,7 +61,16 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
             self.coursesTable.scrollToItem(self.coursesTable.item(match[0].row(), 0))
 
     def edit_button_clicked(self):
-        return
+        if self.coursesTable.currentRow() < 0:
+            print("select a cell or row")
+        else:
+            self.edit_dialog = EditCourseDialog()
+            row = self.coursesTable.currentRow()
+            self.edit_dialog.fill_in(self.coursesTable.item(row, 0).text(), self.coursesTable.item(row, 1).text(),
+                                     self.coursesTable.item(row, 2).text(), self.coursesTable.item(row, 4).text(),
+                                     self.coursesTable.currentColumn())
+            self.edit_dialog.open()
+            self.edit_dialog.finished.connect(self.evaluate)
 
     def evaluate(self, result):
         if result is 1:
