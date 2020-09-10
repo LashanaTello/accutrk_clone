@@ -5,6 +5,7 @@ from gui.CoursesPage import Ui_CoursesPage
 from gui.controllers.edit_course_dialog import EditCourseDialog
 from gui.controllers.add_course_dialog import AddCourseDialog
 from gui.controllers.delete_student_dialog import DeleteStudentDialog
+from gui.controllers.course_roster_dialog import CourseRosterDialog
 from server import Database
 
 
@@ -20,6 +21,7 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         self.edit_dialog = None
         self.add_dialog = None
         self.delete_dialog = None
+        self.course_roster_dialog = None
 
         self.init_ui()
 
@@ -85,7 +87,16 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         return
 
     def registration_button_clicked(self):
-        return
+        if self.coursesTable.currentRow() < 0:
+            print("select a cell or row")
+        else:
+            self.course_roster_dialog = CourseRosterDialog()
+            row = self.coursesTable.currentRow()
+            self.course_roster_dialog.set_course(self.coursesTable.item(row, 0).text(),
+                                                 self.coursesTable.item(row, 1).text(),
+                                                 self.coursesTable.item(row, 2).text())
+            self.course_roster_dialog.fill_in()
+            self.course_roster_dialog.open()
 
     def fill_table(self):
         model = QtGui.QStandardItemModel()

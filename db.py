@@ -223,11 +223,20 @@ class Database(object):
             return True
         return False
 
+    # returns all classes in database with number of students registered in each class
     @staticmethod
     def get_classes_with_size():
-        command = [{"$project": {"_id": 0, "subject": 1, "catalog": 1, "section": 1, "professor": 1, "class_roster": 1,
+        command = [{"$project": {"_id": 0, "subject": 1, "catalog": 1, "section": 1, "professor": 1,
                                  "count": {"$size": "$class_roster"}}}]
         return Database.DATABASE[CLASSES].aggregate(command)
+
+    # returns class_roster for class whose subject, catalog, and section is the given subject, catalog, and section
+    # respectively
+    @staticmethod
+    def get_class_roster(subject, catalog, section):
+        result = Database.DATABASE[CLASSES].find_one({"subject": subject, "catalog": catalog, "section": section},
+                                                     {"_id": 0, "class_roster": 1})
+        return result
 
     # returns list of all classes in the system
     @staticmethod
