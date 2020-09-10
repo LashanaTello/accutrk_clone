@@ -45,7 +45,7 @@ class DeleteStudentDialog(QtWidgets.QDialog, Ui_DeleteStudentDialog):
             if result is True:
                 self.accept()
             else:
-                print("could not delete professor")
+                print("could not delete course")
 
     def fill_in(self, first, last, eid):
         self.nameLabel.setText(first + " " + last)
