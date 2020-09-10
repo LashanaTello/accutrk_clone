@@ -63,11 +63,11 @@ class StudentsPage(QtWidgets.QDialog, Ui_StudentsPage):
             self.studentsTable.scrollToItem(self.studentsTable.item(match[0].row(), 0))
 
     def edit_button_clicked(self):
-        if self.studentsTable.currentRow() < 0:
+        row = self.studentsTable.currentRow()
+        if row < 0:
             print("select a cell or row")
         else:
             self.edit_dialog = EditDialog()
-            row = self.studentsTable.currentRow()
             self.edit_dialog.fill_in(self.studentsTable.item(row, 0).text(), self.studentsTable.item(row, 1).text(),
                                      self.studentsTable.item(row, 2).text(), self.studentsTable.item(row, 3).text(),
                                      self.studentsTable.item(row, 4).text(), self.studentsTable.currentColumn())

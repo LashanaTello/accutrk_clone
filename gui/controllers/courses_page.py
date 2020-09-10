@@ -63,11 +63,11 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
             self.coursesTable.scrollToItem(self.coursesTable.item(match[0].row(), 0))
 
     def edit_button_clicked(self):
-        if self.coursesTable.currentRow() < 0:
+        row = self.coursesTable.currentRow()
+        if row < 0:
             print("select a cell or row")
         else:
             self.edit_dialog = EditCourseDialog()
-            row = self.coursesTable.currentRow()
             self.edit_dialog.fill_in(self.coursesTable.item(row, 0).text(), self.coursesTable.item(row, 1).text(),
                                      self.coursesTable.item(row, 2).text(), self.coursesTable.item(row, 4).text(),
                                      self.coursesTable.currentColumn())
@@ -87,11 +87,11 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         return
 
     def registration_button_clicked(self):
-        if self.coursesTable.currentRow() < 0:
+        row = self.coursesTable.currentRow()
+        if row < 0:
             print("select a cell or row")
         else:
             self.course_roster_dialog = CourseRosterDialog()
-            row = self.coursesTable.currentRow()
             self.course_roster_dialog.set_course(self.coursesTable.item(row, 0).text(),
                                                  self.coursesTable.item(row, 1).text(),
                                                  self.coursesTable.item(row, 2).text())

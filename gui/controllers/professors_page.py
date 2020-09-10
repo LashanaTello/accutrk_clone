@@ -60,11 +60,11 @@ class ProfessorsPage(QtWidgets.QDialog, Ui_ProfessorsPage):
             self.professorsTable.scrollToItem(self.professorsTable.item(match[0].row(), 0))
 
     def edit_button_clicked(self):
-        if self.professorsTable.currentRow() < 0:
+        row = self.professorsTable.currentRow()
+        if row < 0:
             print("select a cell or row")
         else:
             self.edit_dialog = EditDialog()
-            row = self.professorsTable.currentRow()
             self.edit_dialog.fill_in_professor(self.professorsTable.item(row, 0).text(),
                                                self.professorsTable.item(row, 1).text(),
                                                self.professorsTable.item(row, 2).text(),
