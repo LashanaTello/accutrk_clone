@@ -21,6 +21,7 @@ class CourseRosterDialog(QtWidgets.QDialog, Ui_CourseRosterDialog):
         self.init_ui()
 
     def init_ui(self):
+        self.searchbar.setPlaceholderText("Search by Empl ID...")
         self.searchbar.setFocus()
         self.searchByComboBox.currentIndexChanged.connect(self.update_searchbar)
         self.searchbar.returnPressed.connect(self.handle_search)
