@@ -199,8 +199,12 @@ class Database(object):
     # removes student whose eid is an_eid from system
     # returns true if student was deleted and returns false otherwise
     @staticmethod
-    def remove_student(an_eid):
-        result = Database.DATABASE[STUDENTS].delete_one({"eid": an_eid})
+    def remove_student(student_id):
+        enrolled_list = Database.get_student_classes(student_id)
+        for course in enrolled_list["enrolled_list"]:
+            Database.unregister_student(course["student_eid"], course["subject"], course["catalog"], course["section"])
+
+        result = Database.DATABASE[STUDENTS].delete_one({"eid": student_id})
         if result.deleted_count > 0:
             return True
         return False
@@ -269,6 +273,11 @@ class Database(object):
     # returns true if class was deleted and returns false otherwise
     @staticmethod
     def remove_class(subject, catalog, section):
+        roster = Database.DATABASE[CLASSES].find_one({"subject": subject, "catalog": catalog, "section": section},
+                                                     {"_id": 0, "class_roster": 1})
+        for student in roster["class_roster"]:
+            Database.unregister_student(student["student_eid"], subject, catalog, section)
+
         result = Database.DATABASE[CLASSES].delete_one({"subject": subject, "catalog": catalog, "section": section})
         if result.deleted_count > 0:
             return True
@@ -378,13 +387,11 @@ class Database(object):
     # returns false, false if student was not unregistered from the class and the class was not removed from the
     # student's enrolled_list
     @staticmethod
-    def unregister_student(student_eid, student_first_name, student_last_name, subject, catalog, section):
+    def unregister_student(student_eid, subject, catalog, section):
         class_result = Database.DATABASE[CLASSES].update_one({"subject": subject, "catalog": catalog,
                                                               "section": section},
                                                              {"$pull": {"class_roster":
-                                                                            {"student_eid": student_eid,
-                                                                             "student_first_name": student_first_name,
-                                                                             "student_last_name": student_last_name}}}
+                                                                            {"student_eid": student_eid}}}
                                                              )
 
         student_result = Database.DATABASE[STUDENTS].update_one({"eid": student_eid},
