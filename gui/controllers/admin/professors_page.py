@@ -2,9 +2,9 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.ProfessorsPage import Ui_ProfessorsPage
-from gui.controllers.edit_dialog import EditDialog
-from gui.controllers.add_student_dialog import AddStudentDialog
-from gui.controllers.delete_student_dialog import DeleteStudentDialog
+from gui.controllers.admin.edit_dialog import EditDialog
+from gui.controllers.admin.add_student_dialog import AddStudentDialog
+from gui.controllers.admin.delete_dialog import DeleteDialog
 from server import Database
 
 
@@ -87,7 +87,7 @@ class ProfessorsPage(QtWidgets.QDialog, Ui_ProfessorsPage):
         if row < 0:
             print("select a cell or row")
         else:
-            self.delete_dialog = DeleteStudentDialog()
+            self.delete_dialog = DeleteDialog()
             self.delete_dialog.fill_in_prof(self.professorsTable.item(row, 1).text(),
                                             self.professorsTable.item(row, 0).text(),
                                             self.professorsTable.item(row, 2).text())

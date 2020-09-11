@@ -2,10 +2,10 @@ import sys
 from PyQt5 import QtWidgets, QtCore
 
 from gui.AdminPage import Ui_AdminPage
-from gui.controllers.students_page import StudentsPage
-from gui.controllers.professors_page import ProfessorsPage
-from gui.controllers.courses_page import CoursesPage
-from gui.controllers.register_page import RegisterPage
+from gui.controllers.admin.students_page import StudentsPage
+from gui.controllers.admin.professors_page import ProfessorsPage
+from gui.controllers.admin.courses_page import CoursesPage
+from gui.controllers.admin.register_page import RegisterPage
 
 
 class AdminPage(QtWidgets.QDialog, Ui_AdminPage):

@@ -2,13 +2,13 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.FrontPage import Ui_MainWindow
-from gui.controllers.checked_in_list import CheckedInListPage
-from gui.controllers.events import EventDialog
-from gui.controllers.media_dialog import MediaCheckoutDialog
-from gui.controllers.sign_in_dialog import SignInDialog
+from gui.controllers.frontpage.checked_in_list import CheckedInListPage
+from gui.controllers.frontpage.events import EventDialog
+from gui.controllers.frontpage.media_dialog import MediaCheckoutDialog
+from gui.controllers.frontpage.sign_in_dialog import SignInDialog
 from gui.controllers.message_popup import MessagePopup
-from gui.controllers.register_popup import RegisterPopup
-from gui.controllers.admin_page import AdminPage
+from gui.controllers.frontpage.register_popup import RegisterPopup
+from gui.controllers.admin.admin_page import AdminPage
 
 from server import Database
 

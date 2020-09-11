@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.MediaCheckoutPage import Ui_MediaCheckoutPage
-from gui.controllers.media_list_popup import MediaListPopup
+from gui.controllers.frontpage.media_list_popup import MediaListPopup
 from gui.controllers.message_popup import MessagePopup
 from gui.helperfunctions.helpers import convert_time
 from server import MediaDatabase

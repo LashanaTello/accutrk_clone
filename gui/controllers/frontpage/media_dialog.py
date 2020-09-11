@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 
 from gui.MediaCheckoutDialog import Ui_MediaDialog
 from gui.controllers.message_popup import MessagePopup
-from gui.controllers.media_checkout import MediaCheckoutPage
+from gui.controllers.frontpage.media_checkout import MediaCheckoutPage
 from server import Database, MediaDatabase
 
 

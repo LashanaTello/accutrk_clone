@@ -1,13 +1,13 @@
 import sys
 from PyQt5 import QtWidgets
 
-from gui.DeleteStudentDialog import Ui_DeleteStudentDialog
+from gui.DeleteDialog import Ui_DeleteDialog
 from server import Database
 
 
-class DeleteStudentDialog(QtWidgets.QDialog, Ui_DeleteStudentDialog):
+class DeleteDialog(QtWidgets.QDialog, Ui_DeleteDialog):
     def __init__(self, *args, obj=None, **kwargs):
-        super(DeleteStudentDialog, self).__init__(*args, **kwargs)
+        super(DeleteDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
         self.eid = ""
@@ -72,6 +72,6 @@ class DeleteStudentDialog(QtWidgets.QDialog, Ui_DeleteStudentDialog):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
-    window = DeleteStudentDialog()
+    window = DeleteDialog()
     window.show()
     app.exec()
