@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from gui.StudentsPage import Ui_StudentsPage
 from gui.controllers.admin.edit_dialog import EditDialog
 from gui.controllers.admin.add_student_dialog import AddStudentDialog
-from gui.controllers.admin.registered_dialog import RegisteredDialog
+from gui.controllers.admin.students.registered_dialog import RegisteredDialog
 from gui.controllers.admin.delete_dialog import DeleteDialog
 from server import Database
 

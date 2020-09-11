@@ -2,10 +2,10 @@ import sys
 from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.CoursesPage import Ui_CoursesPage
-from gui.controllers.admin.edit_course_dialog import EditCourseDialog
-from gui.controllers.admin.add_course_dialog import AddCourseDialog
+from gui.controllers.admin.courses.edit_course_dialog import EditCourseDialog
+from gui.controllers.admin.courses.add_course_dialog import AddCourseDialog
 from gui.controllers.admin.delete_dialog import DeleteDialog
-from gui.controllers.admin.course_roster_dialog import CourseRosterDialog
+from gui.controllers.admin.courses.course_roster_dialog import CourseRosterDialog
 from server import Database
 
 
