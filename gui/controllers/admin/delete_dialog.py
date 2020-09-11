@@ -69,6 +69,7 @@ class DeleteDialog(QtWidgets.QDialog, Ui_DeleteDialog):
         self.message.setText("Are you sure you want to delete this course?")
         self.deleteButton.setText("Delete Course")
 
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
