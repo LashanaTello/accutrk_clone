@@ -9,6 +9,7 @@ from gui.controllers.admin.register_page import RegisterPage
 from gui.controllers.admin.sign_in_page import SignInPage
 from gui.controllers.admin.sign_out_page import SignOutPage
 from gui.controllers.admin.services_page import ServicesPage
+from gui.controllers.admin.visit_history_page import VisitHistoryPage
 
 
 class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
@@ -24,6 +25,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.sign_in_page = None
         self.sign_out_page = None
         self.services_page = None
+        self.visit_history_page = None
 
         self.init_ui()
 
@@ -48,6 +50,8 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.signInButton.clicked.connect(self.sign_in_button_clicked)
         self.signOutButton.clicked.connect(self.sign_out_button_clicked)
         self.serviceButton.clicked.connect(self.service_button_clicked)
+        self.historyButton.clicked.connect(self.history_button_clicked)
+        self.editHistoryButton.clicked.connect(self.edit_history_button_clicked)
 
     def return_button_clicked(self):
         self.close()
@@ -137,6 +141,19 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.services_page.open()
         self.hide()
         self.services_page.finished.connect(self.reopen)
+
+    def history_button_clicked(self):
+        self.visit_history_page = VisitHistoryPage()
+        self.visit_history_page.open()
+        self.hide()
+        self.visit_history_page.finished.connect(self.reopen)
+
+    def edit_history_button_clicked(self):
+        self.visit_history_page = VisitHistoryPage()
+        self.visit_history_page.adjust_for_edit()
+        self.visit_history_page.open()
+        self.hide()
+        self.visit_history_page.finished.connect(self.reopen)
 
     def reopen(self):
         self.show()
