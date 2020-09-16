@@ -171,7 +171,7 @@ class Ui_SignInDialog(object):
     def retranslateUi(self, SignInDialog):
         _translate = QtCore.QCoreApplication.translate
         SignInDialog.setWindowTitle(_translate("SignInDialog", "Sign In"))
-        self.classLabel.setText(_translate("SignInDialog", "Class"))
+        self.classLabel.setText(_translate("SignInDialog", "Course"))
         self.eventLabel.setText(_translate("SignInDialog", "Events"))
         item = self.classTable.horizontalHeaderItem(0)
         item.setText(_translate("SignInDialog", "Subject"))
