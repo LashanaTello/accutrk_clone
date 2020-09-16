@@ -17,7 +17,7 @@ class Ui_MediaListPopup(object):
         MediaListPopup.resize(1171, 607)
         MediaListPopup.setModal(True)
         self.mediaTable = QtWidgets.QTableWidget(MediaListPopup)
-        self.mediaTable.setGeometry(QtCore.QRect(40, 80, 1091, 491))
+        self.mediaTable.setGeometry(QtCore.QRect(40, 90, 1091, 491))
         self.mediaTable.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.mediaTable.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.mediaTable.setObjectName("mediaTable")
@@ -33,7 +33,7 @@ class Ui_MediaListPopup(object):
         self.mediaTable.horizontalHeader().setDefaultSectionSize(360)
         self.mediaTable.horizontalHeader().setMinimumSectionSize(120)
         self.closeButton = QtWidgets.QPushButton(MediaListPopup)
-        self.closeButton.setGeometry(QtCore.QRect(1030, 20, 99, 27))
+        self.closeButton.setGeometry(QtCore.QRect(1030, 20, 99, 51))
         self.closeButton.setObjectName("closeButton")
 
         self.retranslateUi(MediaListPopup)
