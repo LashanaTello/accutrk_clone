@@ -7,6 +7,7 @@ from gui.controllers.admin.professors_page import ProfessorsPage
 from gui.controllers.admin.courses.courses_page import CoursesPage
 from gui.controllers.admin.register_page import RegisterPage
 from gui.controllers.admin.sign_in_page import SignInPage
+from gui.controllers.admin.sign_out_page import SignOutPage
 
 
 class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
@@ -20,6 +21,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.courses_page = None
         self.register_page = None
         self.sign_in_page = None
+        self.sign_out_page = None
 
         self.init_ui()
 
@@ -42,6 +44,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.courselistButton.clicked.connect(self.courselist_button_clicked)
         self.registerButton.clicked.connect(self.register_button_clicked)
         self.signInButton.clicked.connect(self.sign_in_button_clicked)
+        self.signOutButton.clicked.connect(self.sign_out_button_clicked)
 
     def return_button_clicked(self):
         self.close()
@@ -119,6 +122,12 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.sign_in_page.open()
         self.hide()
         self.sign_in_page.finished.connect(self.reopen)
+
+    def sign_out_button_clicked(self):
+        self.sign_out_page = SignOutPage()
+        self.sign_out_page.open()
+        self.hide()
+        self.sign_out_page.finished.connect(self.reopen)
 
     def reopen(self):
         self.show()
