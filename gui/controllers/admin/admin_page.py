@@ -10,6 +10,7 @@ from gui.controllers.admin.sign_in_page import SignInPage
 from gui.controllers.admin.sign_out_page import SignOutPage
 from gui.controllers.admin.services_page import ServicesPage
 from gui.controllers.admin.visit_history_page import VisitHistoryPage
+from gui.controllers.admin.media_page import MediaPage
 
 
 class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
@@ -26,6 +27,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.sign_out_page = None
         self.services_page = None
         self.visit_history_page = None
+        self.media_page = None
 
         self.init_ui()
 
@@ -52,6 +54,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.serviceButton.clicked.connect(self.service_button_clicked)
         self.historyButton.clicked.connect(self.history_button_clicked)
         self.editHistoryButton.clicked.connect(self.edit_history_button_clicked)
+        self.mediaListButton.clicked.connect(self.media_list_button_clicked)
 
     def return_button_clicked(self):
         self.close()
@@ -154,6 +157,12 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.visit_history_page.open()
         self.hide()
         self.visit_history_page.finished.connect(self.reopen)
+
+    def media_list_button_clicked(self):
+        self.media_page = MediaPage()
+        self.media_page.open()
+        self.hide()
+        self.media_page.finished.connect(self.reopen)
 
     def reopen(self):
         self.show()
