@@ -13,6 +13,7 @@ class VisitHistoryPage(QtWidgets.QDialog, Ui_VisitHistoryPage):
 
     def init_ui(self):
         self.editButton.hide()
+        self.importButton.hide()
         self.closeButton.clicked.connect(self.close_button_clicked)
 
     def close_button_clicked(self):
@@ -21,6 +22,7 @@ class VisitHistoryPage(QtWidgets.QDialog, Ui_VisitHistoryPage):
     def adjust_for_edit(self):
         self.setWindowTitle("Edit Visit History")
         self.editButton.show()
+        self.importButton.show()
 
 
 

@@ -53,6 +53,9 @@ class Ui_VisitHistoryPage(object):
         self.editButton = QtWidgets.QPushButton(VisitHistoryPage)
         self.editButton.setGeometry(QtCore.QRect(1430, 110, 111, 51))
         self.editButton.setObjectName("editButton")
+        self.importButton = QtWidgets.QPushButton(VisitHistoryPage)
+        self.importButton.setGeometry(QtCore.QRect(1430, 200, 111, 51))
+        self.importButton.setObjectName("importButton")
 
         self.retranslateUi(VisitHistoryPage)
         QtCore.QMetaObject.connectSlotsByName(VisitHistoryPage)
@@ -79,3 +82,4 @@ class Ui_VisitHistoryPage(object):
         item = self.visitsTable.horizontalHeaderItem(7)
         item.setText(_translate("VisitHistoryPage", "Barcode"))
         self.editButton.setText(_translate("VisitHistoryPage", "Edit"))
+        self.importButton.setText(_translate("VisitHistoryPage", "Import Visits"))
