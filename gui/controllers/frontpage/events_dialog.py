@@ -1,12 +1,12 @@
 import sys
 from PyQt5 import QtWidgets
 
-from gui.EventsPage import Ui_UpcomingEvents
+from gui.EventsDialog import Ui_UpcomingEvents
 
 
-class EventDialog(QtWidgets.QDialogButtonBox, Ui_UpcomingEvents):
+class EventsDialog(QtWidgets.QDialogButtonBox, Ui_UpcomingEvents):
     def __init__(self, *args, obj=None, **kwargs):
-        super(EventDialog, self).__init__(*args, **kwargs)
+        super(EventsDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
 
         self.init_ui()
@@ -21,6 +21,6 @@ class EventDialog(QtWidgets.QDialogButtonBox, Ui_UpcomingEvents):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
 
-    window = EventDialog()
+    window = EventsDialog()
     window.show()
     app.exec()

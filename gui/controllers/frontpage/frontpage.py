@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 from gui.FrontPage import Ui_MainWindow
 from gui.controllers.frontpage.checked_in_list import CheckedInListPage
-from gui.controllers.frontpage.events import EventDialog
+from gui.controllers.frontpage.events_dialog import EventsDialog
 from gui.controllers.frontpage.media_dialog import MediaCheckoutDialog
 from gui.controllers.frontpage.sign_in_dialog import SignInDialog
 from gui.controllers.message_popup import MessagePopup
@@ -54,7 +54,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.logged_in.show()
 
     def events_button_clicked(self):
-        self.event_dialog = EventDialog()
+        self.event_dialog = EventsDialog()
         self.event_dialog.show()
 
     def media_button_clicked(self):
