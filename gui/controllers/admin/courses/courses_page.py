@@ -6,6 +6,7 @@ from gui.controllers.admin.courses.edit_course_dialog import EditCourseDialog
 from gui.controllers.admin.courses.add_course_dialog import AddCourseDialog
 from gui.controllers.admin.delete_dialog import DeleteDialog
 from gui.controllers.admin.courses.course_roster_dialog import CourseRosterDialog
+from gui.helperfunctions.helpers import combine_into_class
 from server import Database
 
 
@@ -28,7 +29,7 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
     def init_ui(self):
         self.closeButton.clicked.connect(self.close_button_clicked)
         self.searchByComboBox.setPlaceholderText("Search by...")
-        self.searchbar.setPlaceholderText("Search by Subject...")
+        self.searchbar.setPlaceholderText("Search by Course Name... (E.G., 'MATH 10100 - 3' or 'PSYCH 24800 - 12')")
 
         self.fill_table()
         self.searchbar.setFocus()
@@ -46,11 +47,24 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         self.close()
 
     def update_searchbar(self, index):
-        self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() + "...")
         self.searchbar.completer().setCompletionColumn(index)
+        if index == 0:
+            self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() +
+                                              "... (E.G., 'MATH' or 'PSYCH')")
+        elif index == 1:
+            self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() +
+                                              "... (E.G., '10000' OR '12550')")
+        elif index == 2:
+            self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() +
+                                              "... (E.G., '1' OR '20')")
+        elif index == 6:
+            self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() +
+                                              "... (E.G., 'MATH 10100 - 3' or 'PSYCH 24800 - 12')")
+        else:
+            self.searchbar.setPlaceholderText("Search by " + self.searchByComboBox.currentText() + "...")
 
     def handle_activated(self, index):
-        match = self.coursesTable.findItems(index.sibling(index.row(), 6).data(), QtCore.Qt.MatchExactly)
+        match = self.coursesTable.findItems(index.sibling(index.row(), 7).data(), QtCore.Qt.MatchExactly)
         self.coursesTable.selectRow(match[0].row())
         self.coursesTable.scrollToItem(self.coursesTable.item(match[0].row(), 0))
 
@@ -115,7 +129,8 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         model.setHorizontalHeaderItem(3, QtGui.QStandardItem("# of Students"))
         model.setHorizontalHeaderItem(4, QtGui.QStandardItem("Professor"))
         model.setHorizontalHeaderItem(5, QtGui.QStandardItem("Professor Email"))
-        model.setHorizontalHeaderItem(6, QtGui.QStandardItem("UniqueIndex"))
+        model.setHorizontalHeaderItem(6, QtGui.QStandardItem("Course"))
+        model.setHorizontalHeaderItem(7, QtGui.QStandardItem("UniqueIndex"))
 
         courses = Database.get_classes_with_size()
         count = 0
@@ -146,7 +161,9 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
             else:
                 model.setItem(count, 4, QtGui.QStandardItem(""))
                 model.setItem(count, 5, QtGui.QStandardItem(""))
-            model.setItem(count, 6, QtGui.QStandardItem(course["subject"] + course["catalog"] + course["section"]))
+            model.setItem(count, 6, QtGui.QStandardItem(combine_into_class(course["subject"], course["catalog"],
+                                                                           course["section"])))
+            model.setItem(count, 7, QtGui.QStandardItem(course["subject"] + course["catalog"] + course["section"]))
             count += 1
 
         self.coursesTable.setColumnHidden(6, True)
@@ -159,12 +176,14 @@ class CoursesPage(QtWidgets.QDialog, Ui_CoursesPage):
         popup = QtWidgets.QTableView()
         popup.setModel(model)
         popup.setColumnHidden(6, True)
+        popup.setColumnHidden(7, True)
         popup.setMinimumWidth(805)
         popup.setMinimumHeight(300)
         popup.setColumnWidth(4, 170)
         popup.setColumnWidth(5, 220)
         completer.setPopup(popup)
         self.searchbar.setCompleter(completer)
+        self.searchbar.completer().setCompletionColumn(6)
 
 
 if __name__ == '__main__':
