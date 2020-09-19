@@ -13,6 +13,7 @@ from gui.controllers.admin.visit_history_page import VisitHistoryPage
 from gui.controllers.admin.media_page import MediaPage
 from gui.controllers.admin.groups_page import GroupsPage
 from gui.controllers.admin.events_page import EventsPage
+from gui.controllers.admin.semester_page import SemesterPage
 
 
 class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
@@ -32,6 +33,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.media_page = None
         self.groups_page = None
         self.events_page = None
+        self.semester_page = None
 
         self.init_ui()
 
@@ -61,6 +63,7 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.mediaListButton.clicked.connect(self.media_list_button_clicked)
         self.groupsButton.clicked.connect(self.groups_button_clicked)
         self.eventListButton.clicked.connect(self.event_list_button_clicked)
+        self.semesterListButton.clicked.connect(self.semester_list_button_clicked)
 
     def return_button_clicked(self):
         self.close()
@@ -181,6 +184,12 @@ class AdminPage(QtWidgets.QDialog, Ui_AdminPage):
         self.events_page.open()
         self.hide()
         self.events_page.finished.connect(self.reopen)
+
+    def semester_list_button_clicked(self):
+        self.semester_page = SemesterPage()
+        self.semester_page.open()
+        self.hide()
+        self.semester_page.finished.connect(self.reopen)
 
     def reopen(self):
         self.show()
